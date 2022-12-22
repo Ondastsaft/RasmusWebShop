@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace RasmusAB.Models
 {
-    public class Kund : Användare
+    public  class Kund : Användare
     {
         public int Id { get; set; }
         public Kund(string name, string password) : base (name,password)
         {
-
+            name = Username;
+            password = Password;
         }
         public void PrintKund()
         {
@@ -27,10 +28,13 @@ namespace RasmusAB.Models
         }
         public override void RunMe()
         {
-            Console.WriteLine($"Välkommen {name} till Rasmus AB!");
+         
             bool loop = true;
             while (loop)
             {
+
+
+                Console.WriteLine($"Välkommen {Username} till Rasmus AB!");
                 Console.WriteLine($"{(int)MenuList.ShowProducts}. Kläder");
                 Console.WriteLine($"{(int)MenuList.LogIn}. Logga in");
                 Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
@@ -52,14 +56,15 @@ namespace RasmusAB.Models
                 {
                     Console.WriteLine("Fel inmatning");
                 }
-
+             
                 switch (menu)
                 {
                     case MenuList.ShowProducts:
                         Console.WriteLine("Kläder");
                         break;
                     case MenuList.LogIn:
-                        LogIn();
+                         LogIn();
+                        
                         break;
                     case MenuList.SearchProduct:
                         Console.WriteLine("Sök produkt");
@@ -69,7 +74,23 @@ namespace RasmusAB.Models
                         break;
                 }
             }
-            base.RunMe();
+            //base.RunMe();
+        }
+        public static void LogIn()
+        {
+            
+            Console.WriteLine("Användarnamn: ");
+            string username = Console.ReadLine();
+            Console.WriteLine("Lösenord: ");
+            string password = Console.ReadLine();
+
+            for (int i = 0; i < Användarregister.kunder.Count; i++)
+            {
+                if (username.Contains(username))
+                {
+                    Console.WriteLine($"Välkommen {username}");
+                }
+            }
         }
     }
 }
