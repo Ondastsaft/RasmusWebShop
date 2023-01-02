@@ -8,12 +8,13 @@ namespace RasmusAB.Models
 {
     public class Användarregister
     {
-        public virtual ICollection <Kund> kunder { get; set; }
-        public virtual ICollection <Admin> administratörer { get; set; }
+        public static ICollection <Kund> kunder { get; set; }
+        public static ICollection <Admin> administratörer { get; set; }
         public Användarregister()
         {
             kunder.Add(new Kund("Kund 1", "Kund123"));
             administratörer.Add(new Admin("Admin 1", "Admin123"));
         }
+
     }
 }

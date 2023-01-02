@@ -1,10 +1,13 @@
-﻿namespace RasmusAB
+﻿using RasmusAB.Models;
+
+namespace RasmusAB
 {
     public class Program
     {
         static void Main(string[] args)
         {
-            PrintMenu();
+            Models.Kund.LogIn();
+           // PrintMenu();
 
         }
         enum MenuList
