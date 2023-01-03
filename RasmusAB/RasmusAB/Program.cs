@@ -8,14 +8,9 @@ namespace RasmusAB
     {
         static void Main(string[] args)
         {
-            var db = new RasmusABContext();
-            Kund testkund = new Kund("Kund1", "Kund123");
-            db.Add(testkund);
-            //db.Add(new Kund("Kund1", "Kund123"));
-
-            db.SaveChanges();
+            //Användarregister.SkapaKunder();
+            Produkt.LäggTillProdukt();
             PrintMenu();
-
         }
         enum MenuList
         {
@@ -77,18 +72,8 @@ namespace RasmusAB
 
             Console.WriteLine("Lösenord: ");
             string password = Console.ReadLine();
-            
-            var Db = new RasmusABContext();
 
-            var result = from a in Db.Användare                       
-                         select a;
-
-            result.ToList();
-            foreach (var Användare in result)
-            {
-                Console.WriteLine(Användare.Username);
-                Console.ReadKey();
-            }
+            //FÖRSÖKTE LOGGA IN, SYFTE: SE OM ANVÄNDARE HADE SAMMA ANVÄNDARNAMN
             //foreach(var Användare in result)
             //{
             //    if (Användare.Username == username && Användare.Password == password)
@@ -100,6 +85,31 @@ namespace RasmusAB
             //{
             //    result.RunMe
             //}
+
+            //LÄGGER TILL TESTKUND
+            //var db = new RasmusABContext();
+            //Kund k = new Kund("Kund1", "Kund123")
+            //{
+            //    Username = "Kund1",
+            //    Password = "Kund123"
+            //};
+            //db.Kunder.Add(k);
+
+            ////TAR BORT KUDNER FRÅN DATABAS
+            ////db.Kunder.Remove(db.Kunder.Find(7));
+            ////db.SaveChanges();
+
+            //try
+            //{
+            //    db.SaveChanges();
+            //}
+            //catch (Exception err)
+            //{
+            //    Console.WriteLine("Det gick inte att spara personen");
+            //    Console.WriteLine("Du försökte spara en person med följande data: " + k.Username + "-" + k.Password);
+            //    Console.WriteLine(err.InnerException.Message);
+            //}
+            //k.RunMe();
         }
     }
 }

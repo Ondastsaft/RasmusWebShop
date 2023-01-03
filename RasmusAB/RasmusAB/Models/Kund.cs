@@ -36,8 +36,6 @@ namespace RasmusAB.Models
             bool loop = true;
             while (loop)
             {
-
-                Console.WriteLine("test123");
                 Console.WriteLine($"Välkommen {Username} till Rasmus AB!");
 
                 Console.WriteLine($"{(int)MenuList.ShowProducts}. Kläder");
