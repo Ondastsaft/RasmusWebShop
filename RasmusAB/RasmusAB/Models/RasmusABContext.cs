@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace RasmusAB.Models
 {
     public class RasmusABContext : DbContext
     {
-        public DbSet<Användare> Ánvändare { get; set; }
+        public DbSet<Användare> Användare { get; set; }
         public DbSet<Kund> Kunder { get; set; }
         public DbSet<Admin> Administratörer { get; set; }
         public DbSet<Varukorg> Varukorgar { get; set; }
@@ -20,7 +21,7 @@ namespace RasmusAB.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=tcp:rasmusab.database.windows.net,1433;Initial Catalog=DBRasmusABWebshop;Persist Security Info=False;User ID=RasmusABGrupp7;Password=Admin123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            optionsBuilder.UseSqlServer("Server = tcp:rasmusab.database.windows.net, 1433; Initial Catalog = DBRasmusABWebshop; Persist Security Info = False; User ID = RasmusABGrupp7; Password =Admin123; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
         }
     }
 }

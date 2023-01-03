@@ -80,7 +80,7 @@ namespace RasmusAB
             
             var Db = new RasmusABContext();
 
-            var result = from a in Db.Ánvändare                       
+            var result = from a in Db.Användare                       
                          select a;
 
             result.ToList();
