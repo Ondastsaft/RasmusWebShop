@@ -1,4 +1,6 @@
 ﻿using RasmusAB.Models;
+using System.Reflection.Metadata;
+using System.Security.Cryptography;
 
 namespace RasmusAB
 {
@@ -6,8 +8,13 @@ namespace RasmusAB
     {
         static void Main(string[] args)
         {
-            Models.Kund.LogIn();
-           // PrintMenu();
+            var db = new RasmusABContext();
+            Kund testkund = new Kund("Kund1", "Kund123");
+            db.Add(testkund);
+            //db.Add(new Kund("Kund1", "Kund123"));
+
+            db.SaveChanges();
+            PrintMenu();
 
         }
         enum MenuList
@@ -67,8 +74,32 @@ namespace RasmusAB
         {
             Console.WriteLine("Användarnamn: ");
             string username = Console.ReadLine();
+
             Console.WriteLine("Lösenord: ");
             string password = Console.ReadLine();
+            
+            var Db = new RasmusABContext();
+
+            var result = from a in Db.Ánvändare                       
+                         select a;
+
+            result.ToList();
+            foreach (var Användare in result)
+            {
+                Console.WriteLine(Användare.Username);
+                Console.ReadKey();
+            }
+            //foreach(var Användare in result)
+            //{
+            //    if (Användare.Username == username && Användare.Password == password)
+            //    {
+            //        Användare.RunMe();
+            //    }
+            //}
+            //if (result != null)
+            //{
+            //    result.RunMe
+            //}
         }
     }
 }

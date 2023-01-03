@@ -9,10 +9,14 @@ namespace RasmusAB.Models
     public  class Kund : Användare
     {
         public int Id { get; set; }
-        public Kund(string name, string password) : base (name,password)
+        public Kund(string name, string password)
         {
             name = Username;
             password = Password;
+        }
+        private Kund()
+        {
+
         }
         public void PrintKund()
         {
@@ -33,10 +37,11 @@ namespace RasmusAB.Models
             while (loop)
             {
 
-
+                Console.WriteLine("test123");
                 Console.WriteLine($"Välkommen {Username} till Rasmus AB!");
+
                 Console.WriteLine($"{(int)MenuList.ShowProducts}. Kläder");
-                Console.WriteLine($"{(int)MenuList.LogIn}. Logga in");
+                //Console.WriteLine($"{(int)MenuList.LogIn}. Logga in");
                 Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
                 Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
 
