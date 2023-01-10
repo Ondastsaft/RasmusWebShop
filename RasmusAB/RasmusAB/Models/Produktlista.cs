@@ -9,5 +9,6 @@ namespace RasmusAB.Models
     public class Produktlista
     {
         public int Id { get; set; }
+        public virtual ICollection<Produkt> ListansProdukter { get; set; }
     }
 }

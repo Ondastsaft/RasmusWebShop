@@ -11,6 +11,7 @@ namespace RasmusAB.Models
     public class Kund : Användare
     {
         public int Id { get; set; }
+        //public int varukorgsId { get; set; }
         public Kund(string name, string password)
         {
             name = Username;
@@ -162,7 +163,8 @@ namespace RasmusAB.Models
             string val = Console.ReadKey().ToString().ToUpper();
             if(val == "J")
             {
-                LäggProduktIVarukorg();
+                LäggProduktIVarukorg(product.Id);
+
             }
             else if(val == "N")
             {
@@ -170,9 +172,32 @@ namespace RasmusAB.Models
             }
 
         }
-        public static void LäggProduktIVarukorg()
+        public static void LäggProduktIVarukorg(int productId)
         {
+            var db = new RasmusABContext();
+            var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
+            Program.användare.MinVarukorg.VarukorgensProdukter.ListansProdukter.Add(product);
+            db.SaveChanges();
+        }
+        public static void LäggProduktIVarukorg(int productId, int KundId)
+        {
+            var db = new RasmusABContext();
+            var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();          
+            Program.användare.MinVarukorg.VarukorgensProdukter.ListansProdukter.Add(product);
+            db.SaveChanges();
 
+        }
+        public static void LäggTillKund()
+        {
+            var db = new RasmusABContext();
+            //LÄGG TILL KUND    
+            Kund k = new Kund()
+            {
+                Username = "Kund1",
+                Password = "Kund123",
+            };
+            db.Kunder.Add(k);
+            db.SaveChanges();
         }
     }
 }

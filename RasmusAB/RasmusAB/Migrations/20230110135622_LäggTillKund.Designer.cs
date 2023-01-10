@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -11,9 +12,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230110135622_LäggTillKund")]
+    partial class LäggTillKund
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,6 +192,9 @@ namespace RasmusAB.Migrations
             modelBuilder.Entity("RasmusAB.Models.Kund", b =>
                 {
                     b.HasBaseType("RasmusAB.Models.Användare");
+
+                    b.Property<int>("varukorgsId")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Kund");
                 });

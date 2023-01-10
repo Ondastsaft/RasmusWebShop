@@ -1,17 +1,24 @@
 ﻿using RasmusAB.Models;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
 namespace RasmusAB
 {
     public class Program
     {
+        public static Användare användare { get; set; }
+          
+
         static void Main(string[] args)
         {
             //Användarregister.SkapaKunder();
             //Admin.LäggTillProdukt();
             //Admin.LäggTillKategori();
-            Kund.RunMe();
+            //Kund.RunMe();
+            Kund.LäggTillKund();
+            användare = new Användare();
+            PrintMenu();
         }
         enum MenuList
         {
@@ -74,43 +81,16 @@ namespace RasmusAB
             Console.WriteLine("Lösenord: ");
             string password = Console.ReadLine();
 
-            //FÖRSÖKTE LOGGA IN, SYFTE: SE OM ANVÄNDARE HADE SAMMA ANVÄNDARNAMN
-            //foreach(var Användare in result)
-            //{
-            //    if (Användare.Username == username && Användare.Password == password)
-            //    {
-            //        Användare.RunMe();
-            //    }
-            //}
-            //if (result != null)
-            //{
-            //    result.RunMe
-            //}
+            var db = new RasmusABContext();
+            var user = db.Användare.Where(u => u.Username== username).FirstOrDefault();
 
-            //LÄGGER TILL TESTKUND
-            //var db = new RasmusABContext();
-            //Kund k = new Kund("Kund1", "Kund123")
-            //{
-            //    Username = "Kund1",
-            //    Password = "Kund123"
-            //};
-            //db.Kunder.Add(k);
+            if(user.Password == password) 
+            {
+                användare = user;
+            }
 
-            ////TAR BORT KUDNER FRÅN DATABAS
-            ////db.Kunder.Remove(db.Kunder.Find(7));
-            ////db.SaveChanges();
-
-            //try
-            //{
-            //    db.SaveChanges();
-            //}
-            //catch (Exception err)
-            //{
-            //    Console.WriteLine("Det gick inte att spara personen");
-            //    Console.WriteLine("Du försökte spara en person med följande data: " + k.Username + "-" + k.Password);
-            //    Console.WriteLine(err.InnerException.Message);
-            //}
-            //k.RunMe();
+            Console.WriteLine("Hej " + användare.Username + "!");
+            
         }
     }
 }
