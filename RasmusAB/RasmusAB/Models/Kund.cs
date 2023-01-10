@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -121,9 +123,11 @@ namespace RasmusAB.Models
             var db = new RasmusABContext();
             var result = db.Produkter.Where(p => p.KategoriId == foreignKey);
             int index = 1;
+            List<int> produktId = new List<int>();
             foreach (var produkt in result)
             {
                 Console.WriteLine(index + ". " + produkt.Namn);
+                produktId.Add(produkt.Id);
                 index++;
             }
             bool successfullchoise = false;
@@ -135,9 +139,40 @@ namespace RasmusAB.Models
             switch (val)
             {
                 case 1:
-
+                    VisaSpecifikProdukt(produktId[val-1]);
+                    break;
+                case 2:
+                    VisaSpecifikProdukt(produktId[val - 1]);
+                    break;
+                case 3:
+                    VisaSpecifikProdukt(produktId[val - 1]);
                     break;
             }
+        }
+        public static void VisaSpecifikProdukt(int produktId)
+        {
+            var db = new RasmusABContext();
+
+            var product = db.Produkter.Where(p => p.Id == produktId).SingleOrDefault();
+            Console.WriteLine("Namn: " + product.Namn);
+            Console.WriteLine("Färg: " + product.Färg);
+            Console.WriteLine("Pris: " + product.Pris);
+            Console.WriteLine("Antal i lager: " + product.Antal);
+            Console.WriteLine("Lägg till produkt i varukorg? (J/N)");
+            string val = Console.ReadKey().ToString().ToUpper();
+            if(val == "J")
+            {
+                LäggProduktIVarukorg();
+            }
+            else if(val == "N")
+            {
+
+            }
+
+        }
+        public static void LäggProduktIVarukorg()
+        {
+
         }
     }
 }
