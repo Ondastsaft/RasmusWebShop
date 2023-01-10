@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RasmusAB.Models
 {
-    public  class Användare
+    public class Användare
     {
         public int Id { get; set; }
         //public string Usertype { get; set; }
@@ -18,9 +18,5 @@ namespace RasmusAB.Models
         //    Username = name;
         //    Password = password;
         //}
-        public virtual void RunMe()
-        {
-
-        }
     }
 }

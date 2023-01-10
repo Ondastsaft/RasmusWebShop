@@ -9,8 +9,9 @@ namespace RasmusAB
         static void Main(string[] args)
         {
             //Användarregister.SkapaKunder();
-            Produkt.LäggTillProdukt();
-            PrintMenu();
+            //Admin.LäggTillProdukt();
+            //Admin.LäggTillKategori();
+            Kund.RunMe();
         }
         enum MenuList
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RasmusAB.Models
 {
-    public  class Kund : Användare
+    public class Kund : Användare
     {
         public int Id { get; set; }
         public Kund(string name, string password)
@@ -24,22 +24,19 @@ namespace RasmusAB.Models
         }
         enum MenuList
         {
-            ShowProducts = 1,
-            LogIn = 2,
-            SearchProduct = 3,
+            ShowCategory = 1,
+            SearchProduct,
 
             Quit = 9
         }
-        public override void RunMe()
-        {
-         
+        public static void RunMe()
+        {         
             bool loop = true;
             while (loop)
             {
-                Console.WriteLine($"Välkommen {Username} till Rasmus AB!");
+                Console.WriteLine($"Välkommen till Rasmus AB!");
 
-                Console.WriteLine($"{(int)MenuList.ShowProducts}. Kläder");
-                //Console.WriteLine($"{(int)MenuList.LogIn}. Logga in");
+                Console.WriteLine($"{(int)MenuList.ShowCategory}. Kategorier");
                 Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
                 Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
 
@@ -62,12 +59,8 @@ namespace RasmusAB.Models
              
                 switch (menu)
                 {
-                    case MenuList.ShowProducts:
-                        Console.WriteLine("Kläder");
-                        break;
-                    case MenuList.LogIn:
-                         LogIn();
-                        
+                    case MenuList.ShowCategory:
+                        VisaKategori();
                         break;
                     case MenuList.SearchProduct:
                         Console.WriteLine("Sök produkt");
@@ -93,6 +86,57 @@ namespace RasmusAB.Models
                 {
                     Console.WriteLine($"Välkommen {username}");
                 }
+            }
+        }
+        public static void VisaKategori()
+        {
+            var db = new RasmusABContext();
+            int index = 1;
+            foreach(var kategori in db.Kategorier)
+            {
+                Console.WriteLine(kategori.Namn + " = " + index);
+                index++;
+            }
+            bool successfullchoise = false;
+            int val = 0;
+            while (!successfullchoise)
+            {
+                successfullchoise = int.TryParse(Console.ReadLine(),out val);
+            }
+            switch(val)
+            {
+                case 1:
+                    VisaProdukter(1);
+                    break;
+                case 2:
+                    VisaProdukter(2);
+                    break;
+                case 3:
+                    VisaProdukter(3);
+                    break;
+            }
+        }
+        public static void VisaProdukter(int foreignKey)
+        {
+            var db = new RasmusABContext();
+            var result = db.Produkter.Where(p => p.KategoriId == foreignKey);
+            int index = 1;
+            foreach (var produkt in result)
+            {
+                Console.WriteLine(index + ". " + produkt.Namn);
+                index++;
+            }
+            bool successfullchoise = false;
+            int val = 0;
+            while (!successfullchoise)
+            {
+                successfullchoise = int.TryParse(Console.ReadLine(), out val);
+            }
+            switch (val)
+            {
+                case 1:
+
+                    break;
             }
         }
     }
