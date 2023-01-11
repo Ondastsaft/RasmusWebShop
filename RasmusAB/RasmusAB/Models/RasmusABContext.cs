@@ -10,7 +10,6 @@ namespace RasmusAB.Models
         public DbSet<Varukorg> Varukorgar { get; set; }
         public DbSet<Order> Ordrar { get; set; }
         public DbSet<Produkt> Produkter { get; set; }
-
         public DbSet<Kategori> Kategorier { get; set; }
 
 

@@ -4,9 +4,29 @@ namespace RasmusAB
 {
     internal class Methods
     {
-        public void PrintKund()
+        public static void PrintKund()
         {
-            Console.WriteLine("Jag är kund");
+            var db = new RasmusABContext();
+            Användare inloggadAnvändare = new Användare();
+
+            inloggadAnvändare = db.Användare.Where(u => u.Id == Program.AnvändarId).SingleOrDefault();
+            Console.WriteLine(inloggadAnvändare.Username);
+        }
+        public static void LäggTillKund()
+        {
+            var db = new RasmusABContext();
+
+            ////LÄGGER TILL Kategori (TRÖJOR)
+            Kund k = new Kund()
+            {
+                Username = "Kund1",
+                Password = "Kund123",
+                MinVarukorg = new Varukorg(),
+                //VarukorgsId = db.Varukorgar.Count() + 1
+            };
+            db.Kunder.Add(k);
+            db.SaveChanges();
+
         }
         enum MenuList
         {
@@ -58,22 +78,6 @@ namespace RasmusAB
             }
             //base.RunMe();
         }
-        //public static void LogIn()
-        //{
-
-        //    Console.WriteLine("Användarnamn: ");
-        //    string username = Console.ReadLine();
-        //    Console.WriteLine("Lösenord: ");
-        //    string password = Console.ReadLine();
-
-        //    for (int i = 0; i < Användare.Count; i++)
-        //    {
-        //        if (username.Contains(username))
-        //        {
-        //            Console.WriteLine($"Välkommen {username}");
-        //        }
-        //    }
-        //}
         public static void VisaKategori()
         {
             var db = new RasmusABContext();
@@ -155,33 +159,33 @@ namespace RasmusAB
             }
 
         }
-        //public static void LäggProduktIVarukorg(int productId)
-        //{
-        //    var db = new RasmusABContext();
-        //    var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
-        //    Program.användare.MinVarukorg.VarukorgensProdukter.ListansProdukter.Add(product);
-        //    db.SaveChanges();
-        //}
-        //public static void LäggProduktIVarukorg(int productId, int KundId)
-        //{
-        //    var db = new RasmusABContext();
-        //    var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
-        //    Program.användare.MinVarukorg.VarukorgensProdukter.ListansProdukter.Add(product);
-        //    db.SaveChanges();
+        public static void LäggProduktIVarukorg(int productId)
+        {
+            //    var db = new RasmusABContext();
+            //    var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
+            //    Program.användare.MinVarukorg.VarukorgensProdukter.ListansProdukter.Add(product);
+            //    db.SaveChanges();
+            //}
+            //public static void LäggProduktIVarukorg(int productId, int KundId)
+            //{
+            //    var db = new RasmusABContext();
+            //    var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
+            //    Program.användare.MinVarukorg.VarukorgensProdukter.ListansProdukter.Add(product);
+            //    db.SaveChanges();
 
-        //}
-        //public static void LäggTillKund()
-        //{
-        //    var db = new RasmusABContext();
-        //    //LÄGG TILL KUND    
-        //    Kund k = new Kund()
-        //    {
-        //        Username = "Kund1",
-        //        Password = "Kund123",
-        //    };
-        //    db.Kunder.Add(k);
-        //    db.SaveChanges();
-        //}
+            //}
+            //public static void LäggTillKund()
+            //{
+            //    var db = new RasmusABContext();
+            //    //LÄGG TILL KUND    
+            //    Kund k = new Kund()
+            //    {
+            //        Username = "Kund1",
+            //        Password = "Kund123",
+            //    };
+            //    db.Kunder.Add(k);
+            //    db.SaveChanges();
+        }
         public void PrintAdmin()
         {
             Console.WriteLine("Jag är admin");
@@ -328,6 +332,71 @@ namespace RasmusAB
             //};
             //db.Kategorier.Add(k);
             //db.SaveChanges();
+        }
+
+        //public static void PrintMenu()
+        //{
+        //    Console.WriteLine("Välkommen till Rasmus AB!");
+        //    bool loop = true;
+        //    while (loop)
+        //    {
+        //        Console.WriteLine($"{(int)MenuList.ShowProducts}. Kläder");
+        //        Console.WriteLine($"{(int)MenuList.LogIn}. Logga in");
+        //        Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
+        //        Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
+
+        //        //foreach (int i in Enum.GetValues(typeof(MenuList)))
+        //        //{
+        //        //    Console.WriteLine($"{i}. {Enum.GetName(typeof(MenuList), i).Replace('_', ' ')}");
+        //        //}
+
+        //        int nr;
+        //        MenuList menu = (MenuList)99; // Default
+        //        if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
+        //        {
+        //            menu = (MenuList)nr;
+        //            Console.Clear();
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("Fel inmatning");
+        //        }
+
+        //        switch (menu)
+        //        {
+        //            case MenuList.ShowProducts:
+        //                Console.WriteLine("Kläder");
+        //                break;
+        //            case MenuList.LogIn:
+        //                LogIn();
+        //                break;
+        //            case MenuList.SearchProduct:
+        //                Console.WriteLine("Sök produkt");
+        //                break;
+        //            case MenuList.Quit:
+        //                loop = false;
+        //                break;
+        //        }
+        //    }
+        //}
+        public static void LogIn()
+        {
+            //Console.WriteLine("Användarnamn: ");
+            //string username = Console.ReadLine();
+
+            //Console.WriteLine("Lösenord: ");
+            //string password = Console.ReadLine();
+
+            //var db = new RasmusABContext();
+            //var user = db.Användare.Where(u => u.Username == username).FirstOrDefault();
+
+            //if (user.Password == password)
+            //{
+            //    användare = user;
+            //}
+
+            //Console.WriteLine("Hej " + användare.Username + "!");
+
         }
     }
 }
