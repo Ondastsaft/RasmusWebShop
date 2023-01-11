@@ -57,25 +57,6 @@ namespace RasmusAB.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Användare");
                 });
 
-            modelBuilder.Entity("RasmusAB.Models.Användarregister", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AdminId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KundId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Användarregister");
-                });
-
             modelBuilder.Entity("RasmusAB.Models.Kategori", b =>
                 {
                     b.Property<int>("Id")
@@ -131,29 +112,16 @@ namespace RasmusAB.Migrations
                     b.Property<int>("Pris")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProduktlistaId")
+                    b.Property<int?>("VarukorgId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("KategoriId");
 
-                    b.HasIndex("ProduktlistaId");
+                    b.HasIndex("VarukorgId");
 
                     b.ToTable("Produkter");
-                });
-
-            modelBuilder.Entity("RasmusAB.Models.Produktlista", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Produktlistor");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>
@@ -170,12 +138,7 @@ namespace RasmusAB.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProduktListaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProduktListaId");
 
                     b.ToTable("Varukorgar");
                 });
@@ -213,22 +176,11 @@ namespace RasmusAB.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RasmusAB.Models.Produktlista", null)
-                        .WithMany("ListansProdukter")
-                        .HasForeignKey("ProduktlistaId");
+                    b.HasOne("RasmusAB.Models.Varukorg", null)
+                        .WithMany("VarukorgensProdukter")
+                        .HasForeignKey("VarukorgId");
 
                     b.Navigation("Kategori");
-                });
-
-            modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>
-                {
-                    b.HasOne("RasmusAB.Models.Produktlista", "VarukorgensProdukter")
-                        .WithMany()
-                        .HasForeignKey("ProduktListaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("VarukorgensProdukter");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Kategori", b =>
@@ -236,9 +188,9 @@ namespace RasmusAB.Migrations
                     b.Navigation("ProduktLista");
                 });
 
-            modelBuilder.Entity("RasmusAB.Models.Produktlista", b =>
+            modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>
                 {
-                    b.Navigation("ListansProdukter");
+                    b.Navigation("VarukorgensProdukter");
                 });
 #pragma warning restore 612, 618
         }

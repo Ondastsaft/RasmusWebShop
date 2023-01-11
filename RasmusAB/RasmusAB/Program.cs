@@ -1,14 +1,11 @@
 ﻿using RasmusAB.Models;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 
 namespace RasmusAB
 {
     public class Program
     {
         public static Användare användare { get; set; }
-          
+
 
         static void Main(string[] args)
         {
@@ -16,7 +13,7 @@ namespace RasmusAB
             //Admin.LäggTillProdukt();
             //Admin.LäggTillKategori();
             //Kund.RunMe();
-            Kund.LäggTillKund();
+            //Kund.LäggTillKund();
             användare = new Användare();
             PrintMenu();
         }
@@ -82,15 +79,15 @@ namespace RasmusAB
             string password = Console.ReadLine();
 
             var db = new RasmusABContext();
-            var user = db.Användare.Where(u => u.Username== username).FirstOrDefault();
+            var user = db.Användare.Where(u => u.Username == username).FirstOrDefault();
 
-            if(user.Password == password) 
+            if (user.Password == password)
             {
                 användare = user;
             }
 
             Console.WriteLine("Hej " + användare.Username + "!");
-            
+
         }
     }
 }

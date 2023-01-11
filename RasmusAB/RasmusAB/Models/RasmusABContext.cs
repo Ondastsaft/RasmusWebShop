@@ -1,10 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace RasmusAB.Models
 {
@@ -16,9 +10,9 @@ namespace RasmusAB.Models
         public DbSet<Varukorg> Varukorgar { get; set; }
         public DbSet<Order> Ordrar { get; set; }
         public DbSet<Produkt> Produkter { get; set; }
-        public DbSet<Produktlista> Produktlistor { get; set; }
+
         public DbSet<Kategori> Kategorier { get; set; }
-        public DbSet<Användarregister> Användarregister { get; set; }
+
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
