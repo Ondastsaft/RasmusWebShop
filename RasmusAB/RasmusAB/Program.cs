@@ -9,7 +9,10 @@ namespace RasmusAB
 
         static void Main(string[] args)
         {
-            Console.WriteLine();
+            //AnvändarId = 2;
+            ////Methods.LäggTillAnvändare();
+            //Methods.LäggTillProdukt();
+            // Methods.LäggTillAnvändare();
 
         }
 

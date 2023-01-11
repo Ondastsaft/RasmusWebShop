@@ -13,9 +13,15 @@ namespace RasmusAB.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public Varukorg? MinVarukorg { get; set; }
-        public int? VarukorgsId { get; set; }
-
+        public int VarukorgsId { get; set; }
         public bool IsAdmin { get; set; }
+        public Användare()
+        {
+            if (IsAdmin != true)
+            {
+                MinVarukorg = new Varukorg();
+            }
+        }
         //public Användare(string name, string password)
         //{
         //    Username = name;

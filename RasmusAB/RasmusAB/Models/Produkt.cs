@@ -23,9 +23,6 @@ namespace RasmusAB.Models
         //    price = Pris;
         //    antal = Antal;  
         //}
-        private Produkt()
-        {
 
-        }
     }
 }
