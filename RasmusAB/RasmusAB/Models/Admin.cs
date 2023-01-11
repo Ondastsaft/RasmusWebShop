@@ -3,14 +3,10 @@
     public class Admin : Användare
     {
         public int Id { get; set; }
-        public Admin(string name, string password)
+
+        public Admin()
         {
 
         }
-        private Admin()
-        {
-
-        }
-
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace RasmusAB
+﻿using RasmusAB.Models;
+
+namespace RasmusAB
 {
     public class Program
     {
@@ -7,7 +9,7 @@
 
         static void Main(string[] args)
         {
-            Methods.LäggTillKund();
+            Console.WriteLine();
 
         }
 

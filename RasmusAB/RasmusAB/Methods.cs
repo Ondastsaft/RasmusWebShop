@@ -28,6 +28,19 @@ namespace RasmusAB
             db.SaveChanges();
 
         }
+        public static void LäggTillAdmin()
+        {
+            var db = new RasmusABContext();
+
+            ////LÄGGER TILL Kategori (TRÖJOR)
+            Admin a = new Admin()
+            {
+                Username = "Admin",
+                Password = "Admin123",
+            };
+            db.Administratörer.Add(a);
+            db.SaveChanges();
+        }
         enum MenuList
         {
             ShowCategory = 1,
@@ -161,30 +174,11 @@ namespace RasmusAB
         }
         public static void LäggProduktIVarukorg(int productId)
         {
-            //    var db = new RasmusABContext();
-            //    var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
-            //    Program.användare.MinVarukorg.VarukorgensProdukter.ListansProdukter.Add(product);
-            //    db.SaveChanges();
-            //}
-            //public static void LäggProduktIVarukorg(int productId, int KundId)
-            //{
-            //    var db = new RasmusABContext();
-            //    var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
-            //    Program.användare.MinVarukorg.VarukorgensProdukter.ListansProdukter.Add(product);
-            //    db.SaveChanges();
-
-            //}
-            //public static void LäggTillKund()
-            //{
-            //    var db = new RasmusABContext();
-            //    //LÄGG TILL KUND    
-            //    Kund k = new Kund()
-            //    {
-            //        Username = "Kund1",
-            //        Password = "Kund123",
-            //    };
-            //    db.Kunder.Add(k);
-            //    db.SaveChanges();
+            var db = new RasmusABContext();
+            var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
+            int VarukorgsId = db.Varukorgar.Where(v => v.KundId == Program.AnvändarId).SingleOrDefault().Id;
+            db.Varukorgar.Where(v => v.Id == VarukorgsId).SingleOrDefault().VarukorgensProdukter.Add(product);
+            db.SaveChanges();
         }
         public void PrintAdmin()
         {
@@ -333,7 +327,6 @@ namespace RasmusAB
             //db.Kategorier.Add(k);
             //db.SaveChanges();
         }
-
         //public static void PrintMenu()
         //{
         //    Console.WriteLine("Välkommen till Rasmus AB!");
@@ -398,5 +391,7 @@ namespace RasmusAB
             //Console.WriteLine("Hej " + användare.Username + "!");
 
         }
+
+
     }
 }

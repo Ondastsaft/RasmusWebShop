@@ -12,9 +12,10 @@ namespace RasmusAB.Models
         //public string Usertype { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public Varukorg MinVarukorg { get; set; }
-        public int VarukorgsId { get; set; }
+        public Varukorg? MinVarukorg { get; set; }
+        public int? VarukorgsId { get; set; }
 
+        public bool IsAdmin { get; set; }
         //public Användare(string name, string password)
         //{
         //    Username = name;

@@ -5,8 +5,8 @@ namespace RasmusAB.Models
     public class RasmusABContext : DbContext
     {
         public DbSet<Användare> Användare { get; set; }
-        public DbSet<Kund> Kunder { get; set; }
-        public DbSet<Admin> Administratörer { get; set; }
+        //public DbSet<Kund> Kunder { get; set; }
+        //public DbSet<Admin> Administratörer { get; set; }
         public DbSet<Varukorg> Varukorgar { get; set; }
         public DbSet<Order> Ordrar { get; set; }
         public DbSet<Produkt> Produkter { get; set; }
