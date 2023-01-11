@@ -1,4 +1,5 @@
-﻿using RasmusAB.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RasmusAB.Models;
 
 namespace RasmusAB
 {
@@ -16,16 +17,26 @@ namespace RasmusAB
         {
             var db = new RasmusABContext();
 
-            ////LÄGGER TILL Kategori (TRÖJOR)
             Användare k = new Användare()
             {
                 Username = "Kund",
                 Password = "Kund123",
                 MinVarukorg = new Varukorg(),
                 IsAdmin = false,
-                //VarukorgsId = db.Varukorgar.Count() + 1
+
             };
             db.Användare.Add(k);
+
+            Användare a = new Användare()
+            {
+                Username = "Admin",
+                Password = "Admin123",
+                MinVarukorg = new Varukorg(),
+                IsAdmin = true,
+
+            };
+            db.Användare.Add(a);
+
             db.SaveChanges();
 
         }
@@ -168,10 +179,7 @@ namespace RasmusAB
             db.Varukorgar.Where(v => v.Id == VarukorgsId).SingleOrDefault().VarukorgensProdukter.Add(product);
             db.SaveChanges();
         }
-        //public void PrintAnvändare()
-        //{
-        //    Console.WriteLine("Jag är Användare");
-        //}
+
         public static void LäggTillProdukt()
         {
             var db = new RasmusABContext();
@@ -184,7 +192,7 @@ namespace RasmusAB
 
                 Console.WriteLine("Ange färg: ");
                 string färg = Console.ReadLine();
-                               
+
                 foreach (var kategori in db.Kategorier)
                 {
                     Console.WriteLine("Id: " + kategori.Id + " - " + kategori.Namn);
@@ -209,118 +217,6 @@ namespace RasmusAB
                 db.Produkter.Add(nyprodukt);
                 db.SaveChanges();
 
-
-                //////LÄGGER TILL T-SHIRTS (TRÖJOR)
-                //Produkt p = new Produkt()
-                //{
-                //    Namn = "T-shirt",
-                //    KategoriId = 1,
-                //    Färg = "Röd",
-                //    Pris = 70,
-                //    Antal = 100
-                //};
-                //db.Produkter.Add(p);
-                //db.SaveChanges();
-
-                ////LÄGGER TILL HOODIES (TRÖJOR)
-                //Produkt hoodie = new Produkt()
-                //{
-                //    Namn = "Hoodie",
-                //    KategoriId = 1,
-                //    Färg = "Svart",
-                //    Pris = 150,
-                //    Antal = 200
-                //};
-                //db.Produkter.Add(hoodie);
-                //db.SaveChanges();
-
-                ////LÄGGER TILL SKOJRTA
-                //Produkt skjorta = new Produkt()
-                //{
-                //    Namn = "Skjorta",
-                //    KategoriId = 1,
-                //    Färg = "Vit",
-                //    Pris = 200,
-                //    Antal = 50
-                //};
-                //db.Produkter.Add(skjorta);
-                //db.SaveChanges();
-
-                ////LÄGGER TILL JEANS
-                //Produkt jeans = new Produkt()
-                //{
-                //    Namn = "Jeans",
-                //    KategoriId = 2,
-                //    Färg = "Blå",
-                //    Pris = 250,
-                //    Antal = 100
-                //};
-                //db.Produkter.Add(jeans);
-                //db.SaveChanges();
-
-                ////LÄGGER TILL MJUKISBYXOR
-                //Produkt mjukisbyxor = new Produkt()
-                //{
-                //    Namn = "Mjukisbyxor",
-                //    KategoriId = 2,
-                //    Färg = "Grå",
-                //    Pris = 125,
-                //    Antal = 150
-                //};
-                //db.Produkter.Add(mjukisbyxor);
-                //db.SaveChanges();
-
-                ////LÄGGER TILL SHORTS
-                //Produkt shorts = new Produkt()
-                //{
-                //    Namn = "Shorts",
-                //    KategoriId = 2,
-                //    Färg = "Grön",
-                //    Pris = 75,
-                //    Antal = 200
-                //};
-                //db.Produkter.Add(shorts);
-                //db.SaveChanges();
-
-                ////LÄGGER TILL LÖPARSKOR
-                //Produkt löparskor = new Produkt()
-                //{
-                //    Namn = "Löparskor",
-                //    KategoriId = 3,
-                //    Färg = "Svart",
-                //    Pris = 250,
-                //    Antal = 200
-                //};
-                //db.Produkter.Add(löparskor);
-                //db.SaveChanges();
-
-                ////LÄGGER TILL SNEAKERS
-                //Produkt sneakers = new Produkt()
-                //{
-                //    Namn = "Sneakers",
-                //    KategoriId = 3,
-                //    Färg = "Rosa",
-                //    Pris = 275,
-                //    Antal = 100
-                //};
-                //db.Produkter.Add(sneakers);
-                //db.SaveChanges();
-
-                ////LÄGGER TILL SANDALER
-                //Produkt sandaler = new Produkt()
-                //{
-                //    Namn = "Sandaler",
-                //    KategoriId = 3,
-                //    Färg = "Beige",
-                //    Pris = 225,
-                //    Antal = 150
-                //};
-                //db.Produkter.Add(sandaler);
-                //db.SaveChanges();
-
-                ////TAR BORT PRODUKT
-                //db.Produkter.Remove(db.Produkter.Find(10));
-                //db.SaveChanges();
             }
 
 
@@ -329,29 +225,29 @@ namespace RasmusAB
         {
             var db = new RasmusABContext();
 
-            ////LÄGGER TILL Kategori (TRÖJOR)
-            //Kategori k = new Kategori()
-            //{
-            //    Namn = "Tröjor"
-            //};
-            //db.Kategorier.Add(k);
-            //db.SaveChanges();
+            //LÄGGER TILL Kategori (TRÖJOR)
+            Kategori k = new Kategori()
+            {
+                Namn = "Tröjor"
+            };
+            db.Kategorier.Add(k);
+            db.SaveChanges();
 
-            ////LÄGGER TILL Kategori (BYXOR)
-            //Kategori k = new Kategori()
-            //{
-            //    Namn = "Byxor"
-            //};
-            //db.Kategorier.Add(k);
-            //db.SaveChanges();
+            //LÄGGER TILL Kategori (BYXOR)
+            Kategori k1 = new Kategori()
+            {
+                Namn = "Byxor"
+            };
+            db.Kategorier.Add(k1);
+            db.SaveChanges();
 
-            ////LÄGGER TILL Kategori (SKOR)
-            //Kategori k = new Kategori()
-            //{
-            //    Namn = "Skor"
-            //};
-            //db.Kategorier.Add(k);
-            //db.SaveChanges();
+            //LÄGGER TILL Kategori (SKOR)
+            Kategori k2 = new Kategori()
+            {
+                Namn = "Skor"
+            };
+            db.Kategorier.Add(k2);
+            db.SaveChanges();
         }
         //public static void PrintMenu()
         //{
@@ -416,6 +312,127 @@ namespace RasmusAB
 
             //Console.WriteLine("Hej " + användare.Username + "!");
 
+        }
+
+        public static void LäggTillTestprodukter()
+        {
+
+            var db = new RasmusABContext();
+            ////LÄGGER TILL T-SHIRTS (TRÖJOR)
+            Produkt p = new Produkt()
+            {
+                Namn = "T-shirt",
+                KategoriId = 1,
+                Färg = "Röd",
+                Pris = 70,
+                Antal = 100
+            };
+            db.Produkter.Add(p);
+            db.SaveChanges();
+
+            //LÄGGER TILL HOODIES (TRÖJOR)
+            Produkt hoodie = new Produkt()
+            {
+                Namn = "Hoodie",
+                KategoriId = 1,
+                Färg = "Svart",
+                Pris = 150,
+                Antal = 200
+            };
+            db.Produkter.Add(hoodie);
+            db.SaveChanges();
+
+            //LÄGGER TILL SKOJRTA
+            Produkt skjorta = new Produkt()
+            {
+                Namn = "Skjorta",
+                KategoriId = 1,
+                Färg = "Vit",
+                Pris = 200,
+                Antal = 50
+            };
+            db.Produkter.Add(skjorta);
+            db.SaveChanges();
+
+            //LÄGGER TILL JEANS
+            Produkt jeans = new Produkt()
+            {
+                Namn = "Jeans",
+                KategoriId = 2,
+                Färg = "Blå",
+                Pris = 250,
+                Antal = 100
+            };
+            db.Produkter.Add(jeans);
+            db.SaveChanges();
+
+            //LÄGGER TILL MJUKISBYXOR
+            Produkt mjukisbyxor = new Produkt()
+            {
+                Namn = "Mjukisbyxor",
+                KategoriId = 2,
+                Färg = "Grå",
+                Pris = 125,
+                Antal = 150
+            };
+            db.Produkter.Add(mjukisbyxor);
+            db.SaveChanges();
+
+            //LÄGGER TILL SHORTS
+            Produkt shorts = new Produkt()
+            {
+                Namn = "Shorts",
+                KategoriId = 2,
+                Färg = "Grön",
+                Pris = 75,
+                Antal = 200
+            };
+            db.Produkter.Add(shorts);
+            db.SaveChanges();
+
+            //LÄGGER TILL LÖPARSKOR
+            Produkt löparskor = new Produkt()
+            {
+                Namn = "Löparskor",
+                KategoriId = 3,
+                Färg = "Svart",
+                Pris = 250,
+                Antal = 200
+            };
+            db.Produkter.Add(löparskor);
+            db.SaveChanges();
+
+            //LÄGGER TILL SNEAKERS
+            Produkt sneakers = new Produkt()
+            {
+                Namn = "Sneakers",
+                KategoriId = 3,
+                Färg = "Rosa",
+                Pris = 275,
+                Antal = 100
+            };
+            db.Produkter.Add(sneakers);
+            db.SaveChanges();
+
+            //LÄGGER TILL SANDALER
+            Produkt sandaler = new Produkt()
+            {
+                Namn = "Sandaler",
+                KategoriId = 3,
+                Färg = "Beige",
+                Pris = 225,
+                Antal = 150
+            };
+            db.Produkter.Add(sandaler);
+            db.SaveChanges();
+        }
+
+        public static void RensaTabell(string tabellensNamn)
+        {
+            var db = new RasmusABContext();
+            //TAR BORT PRODUKT
+            db.Database.ExecuteSqlRaw($"TRUNCATE TABLE [{tabellensNamn}]");
+            db.SaveChanges();
         }
 
 

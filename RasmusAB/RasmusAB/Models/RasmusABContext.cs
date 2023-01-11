@@ -12,11 +12,14 @@ namespace RasmusAB.Models
         public DbSet<Produkt> Produkter { get; set; }
         public DbSet<Kategori> Kategorier { get; set; }
 
-
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server = tcp:rasmusab.database.windows.net, 1433; Initial Catalog = DBRasmusABWebshop; Persist Security Info = False; User ID = RasmusABGrupp7; Password =Admin123; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Användare>().HasOne(a => a.MinVarukorg).WithOne(v => v.VarukorgensAnvändare).HasForeignKey<Varukorg>(v => v.Id);
+
         }
     }
 }

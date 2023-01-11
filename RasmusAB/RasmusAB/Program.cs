@@ -1,6 +1,4 @@
-﻿using RasmusAB.Models;
-
-namespace RasmusAB
+﻿namespace RasmusAB
 {
     public class Program
     {
@@ -9,10 +7,14 @@ namespace RasmusAB
 
         static void Main(string[] args)
         {
-            //AnvändarId = 2;
-            ////Methods.LäggTillAnvändare();
-            //Methods.LäggTillProdukt();
-            // Methods.LäggTillAnvändare();
+            AnvändarId = 1;
+            //Methods.LäggTillAnvändare();
+            //Methods.LäggTillKategori();
+            //Methods.LäggTillTestprodukter();
+            //Methods.RensaTabell("Varukorgar");
+            //Methods.RensaTabell("Användare");
+            Methods.LäggProduktIVarukorg(2);
+
 
         }
 
