@@ -44,51 +44,79 @@ namespace RasmusAB
         {
             ShowCategory = 1,
             SearchProduct,
+            Login,
 
             Quit = 9
         }
-        public static void RunMe()
+        public static bool RunMe()
         {
-            bool loop = true;
-            while (loop)
-            {
-                Console.WriteLine($"Välkommen till Rasmus AB!");
+                bool quit = false;
+                
+                    Console.WriteLine($"Välkommen till Rasmus AB!");
 
-                Console.WriteLine($"{(int)MenuList.ShowCategory}. Kategorier");
-                Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
-                Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
 
-                //foreach (int i in Enum.GetValues(typeof(MenuList)))
-                //{
-                //    Console.WriteLine($"{i}. {Enum.GetName(typeof(MenuList), i).Replace('_', ' ')}");
-                //}
+                    Console.WriteLine($"{(int)MenuList.ShowCategory}. Kategorier");
+                    Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
+                    Console.WriteLine($"{(int)MenuList.Login}. Logga in");
+                    Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
 
-                int nr;
-                MenuList menu = (MenuList)99; // Default
-                if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
-                {
-                    menu = (MenuList)nr;
-                    Console.Clear();
-                }
-                else
-                {
-                    Console.WriteLine("Fel inmatning");
-                }
+                    //foreach (int i in Enum.GetValues(typeof(MenuList)))
+                    //{
+                    //    Console.WriteLine($"{i}. {Enum.GetName(typeof(MenuList), i).Replace('_', ' ')}");
+                    //}
 
-                switch (menu)
-                {
-                    case MenuList.ShowCategory:
-                        VisaKategori();
-                        break;
-                    case MenuList.SearchProduct:
-                        Console.WriteLine("Sök produkt");
-                        break;
-                    case MenuList.Quit:
-                        loop = false;
-                        break;
-                }
-            }
+                    int nr;
+                    MenuList menu = (MenuList)99; // Default
+                    if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
+                    {
+                        menu = (MenuList)nr;
+                        Console.Clear();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Fel inmatning");
+                    }
+
+                    switch (menu)
+                    {
+                        case MenuList.ShowCategory:
+                            VisaKategori();
+                            break;
+                        case MenuList.SearchProduct:
+                            Console.WriteLine("Sök produkt");
+                            break;
+                        case MenuList.Login:
+                            LogIn();
+                            break;
+                        case MenuList.Quit:
+                            quit = false;
+                            break;
+                    }           
             //base.RunMe();
+            return quit;
+        }
+        public static bool RunMe(bool isadmin)
+        {
+            bool quit = false;
+            if (isadmin)
+            {
+                RunAdmin();
+            }
+            else
+            {
+                RunCustomer();
+            }
+            return quit;
+         } 
+        public static bool RunCustomer()
+        {
+            bool quit = false;
+            return quit;
+        }
+        public static bool RunAdmin()
+        {
+            bool quit = false;
+            return quit;
         }
         public static void VisaKategori()
         {
@@ -159,11 +187,11 @@ namespace RasmusAB
             Console.WriteLine("Pris: " + product.Pris);
             Console.WriteLine("Antal i lager: " + product.Antal);
             Console.WriteLine("Lägg till produkt i varukorg? (J/N)");
-            string val = Console.ReadKey().ToString().ToUpper();
-            if (val == "J")
+            string val = Console.ReadLine();
+            if (val == "J" || val == "j")
             {
-                //LäggProduktIVarukorg(product.Id);
-
+                LäggProduktIVarukorg(produktId);
+                Console.WriteLine("Produkt " + product.Namn + " tillagd");
             }
             else if (val == "N")
             {
@@ -294,21 +322,26 @@ namespace RasmusAB
         //}
         public static void LogIn()
         {
-            //Console.WriteLine("Användarnamn: ");
-            //string username = Console.ReadLine();
+            Console.WriteLine("Användarnamn: ");
+            string username = Console.ReadLine();
 
-            //Console.WriteLine("Lösenord: ");
-            //string password = Console.ReadLine();
+            Console.WriteLine("Lösenord: ");
+            string password = Console.ReadLine();
 
-            //var db = new RasmusABContext();
-            //var user = db.Användare.Where(u => u.Username == username).FirstOrDefault();
+            var db = new RasmusABContext();
+            var user = db.Användare.Where(u => u.Username == username).FirstOrDefault();
 
-            //if (user.Password == password)
-            //{
-            //    användare = user;
-            //}
+            if (user.Password == password)
+            {
+                Program.AnvändarId = user.Id;   
+                Program.IsAdmin = user.IsAdmin;
+                Console.WriteLine("Hej " + user.Username + "!");
 
-            //Console.WriteLine("Hej " + användare.Username + "!");
+            }
+            else
+            {
+                Console.WriteLine("Felaktigt namn eller lösenord, försök igen! ");
+            }
 
         }
 

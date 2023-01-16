@@ -11,8 +11,8 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    [Migration("20230116101405_varukorgensprodukter5")]
-    partial class varukorgensprodukter5
+    [Migration("20230116132828_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,13 +25,13 @@ namespace RasmusAB.Migrations
 
             modelBuilder.Entity("ProduktVarukorg", b =>
                 {
-                    b.Property<int>("VarukorgensProdukterId")
+                    b.Property<int>("ProduktersId")
                         .HasColumnType("int");
 
                     b.Property<int>("VarukorgsId")
                         .HasColumnType("int");
 
-                    b.HasKey("VarukorgensProdukterId", "VarukorgsId");
+                    b.HasKey("ProduktersId", "VarukorgsId");
 
                     b.HasIndex("VarukorgsId");
 
@@ -156,7 +156,7 @@ namespace RasmusAB.Migrations
                 {
                     b.HasOne("RasmusAB.Models.Produkt", null)
                         .WithMany()
-                        .HasForeignKey("VarukorgensProdukterId")
+                        .HasForeignKey("ProduktersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

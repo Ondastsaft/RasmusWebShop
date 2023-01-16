@@ -4,7 +4,7 @@
 
 namespace RasmusAB.Migrations
 {
-    public partial class init257 : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,8 +57,7 @@ namespace RasmusAB.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AntalProdukter = table.Column<int>(type: "int", nullable: false),
                     AnvändarId = table.Column<int>(type: "int", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    AnvädareVarukorgId = table.Column<int>(type: "int", nullable: false)
+                    OrderId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,8 +80,7 @@ namespace RasmusAB.Migrations
                     KategoriId = table.Column<int>(type: "int", nullable: false),
                     Färg = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Pris = table.Column<int>(type: "int", nullable: false),
-                    Antal = table.Column<int>(type: "int", nullable: false),
-                    VarukorgId = table.Column<int>(type: "int", nullable: true)
+                    Antal = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,11 +91,30 @@ namespace RasmusAB.Migrations
                         principalTable: "Kategorier",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProduktVarukorg",
+                columns: table => new
+                {
+                    ProduktersId = table.Column<int>(type: "int", nullable: false),
+                    VarukorgsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProduktVarukorg", x => new { x.ProduktersId, x.VarukorgsId });
                     table.ForeignKey(
-                        name: "FK_Produkter_Varukorgar_VarukorgId",
-                        column: x => x.VarukorgId,
+                        name: "FK_ProduktVarukorg_Produkter_ProduktersId",
+                        column: x => x.ProduktersId,
+                        principalTable: "Produkter",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProduktVarukorg_Varukorgar_VarukorgsId",
+                        column: x => x.VarukorgsId,
                         principalTable: "Varukorgar",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -106,9 +123,9 @@ namespace RasmusAB.Migrations
                 column: "KategoriId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Produkter_VarukorgId",
-                table: "Produkter",
-                column: "VarukorgId");
+                name: "IX_ProduktVarukorg_VarukorgsId",
+                table: "ProduktVarukorg",
+                column: "VarukorgsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Varukorgar_AnvändarId",
@@ -123,13 +140,16 @@ namespace RasmusAB.Migrations
                 name: "Ordrar");
 
             migrationBuilder.DropTable(
+                name: "ProduktVarukorg");
+
+            migrationBuilder.DropTable(
                 name: "Produkter");
 
             migrationBuilder.DropTable(
-                name: "Kategorier");
+                name: "Varukorgar");
 
             migrationBuilder.DropTable(
-                name: "Varukorgar");
+                name: "Kategorier");
 
             migrationBuilder.DropTable(
                 name: "Användare");
