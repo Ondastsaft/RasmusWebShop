@@ -6,7 +6,9 @@
         public ICollection<Produkt> VarukorgensProdukter { get; set; }
         public int AnvändarId { get; set; }
         public int? OrderId { get; set; }
-        public Användare VarukorgensAnvändare { get; set; }
-  
+        public Användare Användare { get; set; }
+        public int AnvädareVarukorgId { get; set; }
+        
+        
     }
 }

@@ -12,8 +12,8 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    [Migration("20230111153647_battre")]
-    partial class battre
+    [Migration("20230116083856_VarukorgsID")]
+    partial class VarukorgsID
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +42,9 @@ namespace RasmusAB.Migrations
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VarukorgsId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -118,6 +121,12 @@ namespace RasmusAB.Migrations
             modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AnvädareVarukorgId")
                         .HasColumnType("int");
 
                     b.Property<int>("AnvändarId")
@@ -127,6 +136,9 @@ namespace RasmusAB.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnvändarId")
+                        .IsUnique();
 
                     b.ToTable("Varukorgar");
                 });
@@ -148,18 +160,18 @@ namespace RasmusAB.Migrations
 
             modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>
                 {
-                    b.HasOne("RasmusAB.Models.Användare", "VarukorgensAnvändare")
-                        .WithOne("MinVarukorg")
-                        .HasForeignKey("RasmusAB.Models.Varukorg", "Id")
+                    b.HasOne("RasmusAB.Models.Användare", "Användare")
+                        .WithOne("AnvändareVarukorg")
+                        .HasForeignKey("RasmusAB.Models.Varukorg", "AnvändarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("VarukorgensAnvändare");
+                    b.Navigation("Användare");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Användare", b =>
                 {
-                    b.Navigation("MinVarukorg")
+                    b.Navigation("AnvändareVarukorg")
                         .IsRequired();
                 });
 

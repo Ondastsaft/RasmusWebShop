@@ -21,7 +21,7 @@ namespace RasmusAB
             {
                 Username = "Kund",
                 Password = "Kund123",
-                MinVarukorg = new Varukorg(),
+                AnvändareVarukorg = new Varukorg(),
                 IsAdmin = false,
 
             };
@@ -31,7 +31,7 @@ namespace RasmusAB
             {
                 Username = "Admin",
                 Password = "Admin123",
-                MinVarukorg = new Varukorg(),
+                AnvändareVarukorg = new Varukorg(),
                 IsAdmin = true,
 
             };
@@ -175,11 +175,10 @@ namespace RasmusAB
         {
             var db = new RasmusABContext();
             var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
-            int VarukorgsId = db.Varukorgar.Where(v => v.VarukorgensAnvändare.Id == Program.AnvändarId).SingleOrDefault().Id;
+            int VarukorgsId = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().Id;
             db.Varukorgar.Where(v => v.Id == VarukorgsId).SingleOrDefault().VarukorgensProdukter.Add(product);
             db.SaveChanges();
         }
-
         public static void LäggTillProdukt()
         {
             var db = new RasmusABContext();

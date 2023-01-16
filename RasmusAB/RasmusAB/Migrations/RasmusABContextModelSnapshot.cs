@@ -41,6 +41,9 @@ namespace RasmusAB.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("VarukorgsId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Användare");
@@ -116,6 +119,12 @@ namespace RasmusAB.Migrations
             modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AnvädareVarukorgId")
                         .HasColumnType("int");
 
                     b.Property<int>("AnvändarId")
@@ -125,6 +134,9 @@ namespace RasmusAB.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnvändarId")
+                        .IsUnique();
 
                     b.ToTable("Varukorgar");
                 });
@@ -146,18 +158,18 @@ namespace RasmusAB.Migrations
 
             modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>
                 {
-                    b.HasOne("RasmusAB.Models.Användare", "VarukorgensAnvändare")
-                        .WithOne("MinVarukorg")
-                        .HasForeignKey("RasmusAB.Models.Varukorg", "Id")
+                    b.HasOne("RasmusAB.Models.Användare", "Användare")
+                        .WithOne("AnvändareVarukorg")
+                        .HasForeignKey("RasmusAB.Models.Varukorg", "AnvändarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("VarukorgensAnvändare");
+                    b.Navigation("Användare");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Användare", b =>
                 {
-                    b.Navigation("MinVarukorg")
+                    b.Navigation("AnvändareVarukorg")
                         .IsRequired();
                 });
 
