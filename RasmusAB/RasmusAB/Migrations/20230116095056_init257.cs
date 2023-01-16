@@ -4,7 +4,7 @@
 
 namespace RasmusAB.Migrations
 {
-    public partial class VarukorgsID : Migration
+    public partial class init257 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -55,8 +55,9 @@ namespace RasmusAB.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    AntalProdukter = table.Column<int>(type: "int", nullable: false),
                     AnvändarId = table.Column<int>(type: "int", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: true),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
                     AnvädareVarukorgId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

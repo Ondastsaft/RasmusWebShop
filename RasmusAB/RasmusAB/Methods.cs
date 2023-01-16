@@ -173,11 +173,11 @@ namespace RasmusAB
         }
         public static void LäggProduktIVarukorg(int productId)
         {
-            var db = new RasmusABContext();
-            var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
-            int VarukorgsId = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().Id;
-            db.Varukorgar.Where(v => v.Id == VarukorgsId).SingleOrDefault().VarukorgensProdukter.Add(product);
-            db.SaveChanges();
+            //var db = new RasmusABContext();
+            //var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
+            //int VarukorgsId = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().Id;
+            //db.Varukorgar.Where(v => v.Id == 1).VarukorgensProdukter.Add(product);
+            //db.SaveChanges();
         }
         public static void LäggTillProdukt()
         {

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -10,9 +11,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230116100224_varukorgensprodukter")]
+    partial class varukorgensprodukter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,15 +25,15 @@ namespace RasmusAB.Migrations
 
             modelBuilder.Entity("ProduktVarukorg", b =>
                 {
-                    b.Property<int>("ProduktersId")
+                    b.Property<int>("VarukorgensProdukterId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VarukorgsId")
+                    b.Property<int>("VarukorgensProdukterId1")
                         .HasColumnType("int");
 
-                    b.HasKey("ProduktersId", "VarukorgsId");
+                    b.HasKey("VarukorgensProdukterId", "VarukorgensProdukterId1");
 
-                    b.HasIndex("VarukorgsId");
+                    b.HasIndex("VarukorgensProdukterId1");
 
                     b.ToTable("ProduktVarukorg");
                 });
@@ -136,6 +138,9 @@ namespace RasmusAB.Migrations
                     b.Property<int>("AntalProdukter")
                         .HasColumnType("int");
 
+                    b.Property<int>("AnvädareVarukorgId")
+                        .HasColumnType("int");
+
                     b.Property<int>("AnvändarId")
                         .HasColumnType("int");
 
@@ -154,13 +159,13 @@ namespace RasmusAB.Migrations
                 {
                     b.HasOne("RasmusAB.Models.Produkt", null)
                         .WithMany()
-                        .HasForeignKey("ProduktersId")
+                        .HasForeignKey("VarukorgensProdukterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RasmusAB.Models.Varukorg", null)
                         .WithMany()
-                        .HasForeignKey("VarukorgsId")
+                        .HasForeignKey("VarukorgensProdukterId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

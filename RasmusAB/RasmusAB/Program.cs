@@ -13,7 +13,7 @@
             //Methods.LäggTillTestprodukter();
             //Methods.RensaTabell("Varukorgar");
             //Methods.RensaTabell("Användare");
-            Methods.LäggProduktIVarukorg(2);
+            //Methods.LäggProduktIVarukorg(2);
 
 
         }

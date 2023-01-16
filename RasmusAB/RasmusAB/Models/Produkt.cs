@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RasmusAB.Models
+﻿namespace RasmusAB.Models
 {
     public class Produkt
     {
@@ -15,6 +9,13 @@ namespace RasmusAB.Models
         public int Pris { get; set; }
         public int Antal { get; set; }
         public Kategori Kategori { get; set; }
+        public virtual ICollection<Varukorg> Varukorgs { get; set; }
+
+        public Produkt()
+        {
+            Varukorgs = new List<Varukorg>();
+        }
+
         //public Produkt(string name, int categoryId, string colour, int price, int antal)
         //{
         //    name = Namn;
