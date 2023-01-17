@@ -9,6 +9,11 @@
         public Varukorg AnvändareVarukorg { get; set; }
         public bool IsAdmin { get; set; }
         public int VarukorgsId { get; set; }
+        public string Gata { get; set; }
+        public string Stad { get; set; }
+        public string Land { get; set; }
+        public int Telefonnummer { get; set; }
+        public string Email { get; set; }
 
         public Användare()
         {

@@ -52,14 +52,16 @@ namespace RasmusAB
         {
             Produkt = 1,
             Kategori,
-            Kunder
+            Kunder,
+            Quit = 9
 
         }
         enum ProduktMenyAdmin
         {
             Lägg_Tiill_produkt = 1,
             Ändra_Produkt,
-            Ta_Bort_Produkt
+            Ta_Bort_Produkt,
+            
         }
         enum KategoriMenyAdmin
         {
@@ -111,6 +113,11 @@ namespace RasmusAB
                     LogIn();
                     if(Program.IsAdmin == true)
                     {
+                        Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
+                        Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
+                        Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
+                        Console.WriteLine($"{(int)MenuListAdmin.Quit}. Avsluta");
+
                         MenuListAdmin menuAdmin = (MenuListAdmin)99; // Default
                         if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
                         {
@@ -125,6 +132,11 @@ namespace RasmusAB
                         {
                             case MenuListAdmin.Produkt:
                                 ProduktMenyAdmin ProduktMenuAdmin = (ProduktMenyAdmin)99; // Default
+
+                                Console.WriteLine($"{(int)ProduktMenyAdmin.Lägg_Tiill_produkt}. Lägg till Produkt");
+                                Console.WriteLine($"{(int)ProduktMenyAdmin.Ändra_Produkt}. Ändra Produkt");
+                                Console.WriteLine($"{(int)ProduktMenyAdmin.Ta_Bort_Produkt}. Ta bort Produkt");
+
                                 if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
                                 {
                                     ProduktMenuAdmin = (ProduktMenyAdmin)nr;
@@ -149,6 +161,10 @@ namespace RasmusAB
                                 break;
                             case MenuListAdmin.Kategori:
                                 KategoriMenyAdmin KategoriMenuAdmin = (KategoriMenyAdmin)99; // Default
+
+                                Console.WriteLine($"{(int)KategoriMenyAdmin.Lägg_Till_Kategori}. Lägg till Kategori");
+                                Console.WriteLine($"{(int)KategoriMenyAdmin.Ta_Bort_Kategori}. Ta bort Kategori");
+
                                 if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
                                 {
                                     KategoriMenuAdmin = (KategoriMenyAdmin)nr;
@@ -161,13 +177,16 @@ namespace RasmusAB
                                 switch (KategoriMenuAdmin)
                                 {
                                     case KategoriMenyAdmin.Lägg_Till_Kategori:
+                                        LäggTillKategori();
                                         break;
                                     case KategoriMenyAdmin.Ta_Bort_Kategori:
+                                        TaBortKategori();
                                         break;
                                 }
                                 break;
                             case MenuListAdmin.Kunder:
                                 KundMenyAdmin KundMenuAdmin = (KundMenyAdmin)99; // Default
+                                Console.WriteLine($"{(int)KundMenyAdmin.Ändra_Kunduppgift}. Ändra Kunduppgifter");
                                 if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
                                 {
                                     KundMenuAdmin = (KundMenyAdmin)nr;
@@ -308,9 +327,9 @@ namespace RasmusAB
         {
             var db = new RasmusABContext();
 
-            bool IsAdmin = db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().IsAdmin;
-            if (IsAdmin)
-            {
+            //bool IsAdmin = db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().IsAdmin;
+            //if (IsAdmin)
+            //{
                 Console.WriteLine("Ange namn: ");
                 string namn = Console.ReadLine();
 
@@ -341,7 +360,7 @@ namespace RasmusAB
                 db.Produkter.Add(nyprodukt);
                 db.SaveChanges();
 
-            }
+            //}
 
 
         }
@@ -403,30 +422,94 @@ namespace RasmusAB
         {
             var db = new RasmusABContext();
 
-            //LÄGGER TILL Kategori (TRÖJOR)
-            Kategori k = new Kategori()
+            Console.WriteLine("Ange namn: ");
+            string kategoriNamn = Console.ReadLine();
+
+
+            Kategori nyKategori = new Kategori()
             {
-                Namn = "Tröjor"
+                Namn = kategoriNamn
             };
-            db.Kategorier.Add(k);
+            db.Kategorier.Add(nyKategori);
             db.SaveChanges();
 
-            //LÄGGER TILL Kategori (BYXOR)
-            Kategori k1 = new Kategori()
-            {
-                Namn = "Byxor"
-            };
-            db.Kategorier.Add(k1);
-            db.SaveChanges();
+            ////LÄGGER TILL Kategori (TRÖJOR)
+            //Kategori k = new Kategori()
+            //{
+            //    Namn = "Tröjor"
+            //};
+            //db.Kategorier.Add(k);
+            //db.SaveChanges();
 
-            //LÄGGER TILL Kategori (SKOR)
-            Kategori k2 = new Kategori()
+            ////LÄGGER TILL Kategori (BYXOR)
+            //Kategori k1 = new Kategori()
+            //{
+            //    Namn = "Byxor"
+            //};
+            //db.Kategorier.Add(k1);
+            //db.SaveChanges();
+
+            ////LÄGGER TILL Kategori (SKOR)
+            //Kategori k2 = new Kategori()
+            //{
+            //    Namn = "Skor"
+            //};
+            //db.Kategorier.Add(k2);
+            //db.SaveChanges();
+        }
+        public static void TaBortKategori()
+        {
+            var db = new RasmusABContext();
+            foreach (var kategori in db.Kategorier)
             {
-                Namn = "Skor"
-            };
-            db.Kategorier.Add(k2);
+                Console.WriteLine(kategori.Namn + " - ID: " + kategori.Id);
+            }
+
+            Console.WriteLine("Vilken kategori vill du ta bort? (Skriv KategoriID)");
+            var chosenCategoryId = int.Parse(Console.ReadLine());
+            var chosenCategory = db.Kategorier.Where(k => k.Id == chosenCategoryId).SingleOrDefault();
+            db.Remove(chosenCategory);
             db.SaveChanges();
         }
+        public static void ÄndraKunduppgifter()
+        {
+            var db = new RasmusABContext();
+
+            foreach (var användare in db.Användare)
+            {
+                Console.WriteLine(användare.Username + " - ID: " + användare.Id);
+            }
+            bool changeProduct = true;
+            while (changeProduct = true)
+            {
+                Console.WriteLine("Vilken användare vill du ändra? (Skriv AnvändarID)");
+                var chosenUserId = int.Parse(Console.ReadLine());
+                var chosenUser = db.Produkter.Where(p => p.Id == chosenUserId).SingleOrDefault();
+
+                Console.WriteLine(chosenUser.Namn + "\n" + "Nytt namn: ");
+                var newName = Console.ReadLine();
+                chosenUser.Namn = newName;
+                Console.WriteLine(chosenProduct.Färg + "\n" + "Ny färg: ");
+                var newColor = Console.ReadLine();
+                chosenProduct.Färg = newColor;
+                Console.WriteLine(chosenProduct.Antal + "\n" + "Nytt antal: ");
+                var newAmount = int.Parse(Console.ReadLine());
+                Console.WriteLine(chosenProduct.Pris + "\n" + "Nytt pris: ");
+                var newPrice = int.Parse(Console.ReadLine());
+                Console.WriteLine("Ändrad produkt: " + "\n" + newName + "\n" + newColor + "\n" + newAmount + "\n" + newPrice);
+
+                Console.WriteLine("Vill du spara? (J/N)");
+                var answer = Console.ReadLine();
+                if (answer == "J")
+                {
+                    db.SaveChanges();
+                    changeProduct = false;
+                }
+                if (answer == "N")
+                {
+
+                }
+            }
         //public static void PrintMenu()
         //{
         //    Console.WriteLine("Välkommen till Rasmus AB!");
@@ -486,7 +569,6 @@ namespace RasmusAB
             if (user.Password == password && user.Password.Contains("Admin"))
             {
                 Program.IsAdmin = true;
-                Program.IsAdmin = user.IsAdmin;
                 Console.WriteLine("Hej " + user.Username + "!");
             }
             else if (user.Password == password)
@@ -499,7 +581,6 @@ namespace RasmusAB
             {
                 Console.WriteLine("Felaktigt namn eller lösenord, försök igen! ");
             }
-
         }
 
         public static void LäggTillTestprodukter()

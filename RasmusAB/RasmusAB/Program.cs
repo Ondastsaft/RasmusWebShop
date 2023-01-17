@@ -10,8 +10,9 @@
             bool quit = false;
             while (quit != true)
             {
-                Methods.ÄndraProdukt();
-                //quit = Methods.RunMe();
+
+                //Methods.ÄndraProdukt();
+                quit = Methods.RunMe();
                 //Methods.LäggTillAnvändare();
                 //Methods.LäggTillKategori();
                 //Methods.LäggTillTestprodukter();
