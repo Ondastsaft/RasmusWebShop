@@ -4,7 +4,7 @@
 
 namespace RasmusAB.Migrations
 {
-    public partial class init : Migration
+    public partial class admininit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,7 +17,12 @@ namespace RasmusAB.Migrations
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false),
-                    VarukorgsId = table.Column<int>(type: "int", nullable: false)
+                    VarukorgsId = table.Column<int>(type: "int", nullable: false),
+                    Gata = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Stad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Land = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Telefonnummer = table.Column<int>(type: "int", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

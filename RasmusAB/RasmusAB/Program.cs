@@ -7,7 +7,10 @@
 
         static void Main(string[] args)
         {
+            //Methods.LäggTillKategori();
+            //Methods.LäggTillTestprodukter();
             bool quit = false;
+            AnvändarId = 1;
             while (quit != true)
             {
 

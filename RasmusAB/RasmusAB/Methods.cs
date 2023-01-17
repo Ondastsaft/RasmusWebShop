@@ -21,6 +21,11 @@ namespace RasmusAB
             {
                 Username = "Kund",
                 Password = "Kund123",
+                Gata = "Kundgatan 1",
+                Stad = "Kundstaden",
+                Land = "Sverige",
+                Telefonnummer = 0701234567,
+                Email = "Kund@hotmail.com",
                 AnvändareVarukorg = new Varukorg(),
                 IsAdmin = false,
 
@@ -45,6 +50,14 @@ namespace RasmusAB
             ShowCategory = 1,
             SearchProduct,
             Login,
+
+            Quit = 9
+        }
+        enum MenyKund
+        {
+            ShowCategory = 1,
+            SearchProduct,
+            ShopingCart,
 
             Quit = 9
         }
@@ -78,16 +91,10 @@ namespace RasmusAB
 
             Console.WriteLine($"Välkommen till Rasmus AB!");
 
-
             Console.WriteLine($"{(int)MenuList.ShowCategory}. Kategorier");
             Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
             Console.WriteLine($"{(int)MenuList.Login}. Logga in");
             Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
-
-            //foreach (int i in Enum.GetValues(typeof(MenuList)))
-            //{
-            //    Console.WriteLine($"{i}. {Enum.GetName(typeof(MenuList), i).Replace('_', ' ')}");
-            //}
 
             int nr;
             MenuList menu = (MenuList)99; // Default
@@ -199,8 +206,71 @@ namespace RasmusAB
                                 switch (KundMenuAdmin)
                                 {
                                     case KundMenyAdmin.Ändra_Kunduppgift:
+                                        ÄndraKunduppgifter();
                                         break;
                                 }
+                                break;
+                        }
+                    }
+                    else if (Program.IsAdmin != true)
+                    {
+                        Console.WriteLine($"{(int)MenyKund.ShowCategory}. Visa Kategorier");
+                        Console.WriteLine($"{(int)MenyKund.SearchProduct}. Sök Produkt");
+                        Console.WriteLine($"{(int)MenyKund.ShopingCart}. Varukorg");
+                        Console.WriteLine($"{(int)MenyKund.Quit}. Avsluta");
+
+                        MenyKund menuCustomer = (MenyKund)99; // Default
+                        if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
+                        {
+                            menuCustomer = (MenyKund)nr;
+                            Console.Clear();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Fel inmatning");
+                        }
+                        switch(menuCustomer)
+                        {
+                            case MenyKund.ShowCategory:
+                                VisaKategori();
+                                break;
+                            case MenyKund.SearchProduct:
+
+                                break;
+                            case MenyKund.ShopingCart:
+
+                                break;
+                            case MenyKund.Quit:
+                                break;
+                        }
+                    }
+                    {
+                        Console.WriteLine($"{(int)MenyKund.ShowCategory}. Kategorier");
+                        Console.WriteLine($"{(int)MenyKund.SearchProduct}. Sök produkt");
+                        Console.WriteLine($"{(int)MenyKund.ShopingCart}. Varukorg");
+                        Console.WriteLine($"{(int)MenyKund.Quit}. Avsluta");
+
+                        MenyKund menuKund = (MenyKund)99; // Default
+                        if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
+                        {
+                            menuKund = (MenyKund)nr;
+                            Console.Clear();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Fel inmatning");
+                        }
+                        switch(MenyKund)
+                        {
+                            case MenyKund.ShowCategory:
+                                VisaKategori();
+                                break;
+                            case MenyKund.SearchProduct:
+                                break;
+                            case MenyKund.ShopingCart:
+
+                                break;
+                            case MenyKund.Quit:
                                 break;
                         }
                     }
@@ -320,7 +390,95 @@ namespace RasmusAB
         {
             var db = new RasmusABContext();
             var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
-            db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().Produkters.Add(product);
+            Console.WriteLine("Välj antal: ");
+            var amount = int.Parse(Console.ReadLine());
+            var shopingcartProduct = new Varukorgsprodukt();
+            shopingcartProduct.Produkt = product;
+            shopingcartProduct.Antal = amount;
+            db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().Varukorgsprodukts.Add(shopingcartProduct);
+            db.Produkter.Where(p => p.Equals(product)).SingleOrDefault().Antal = (db.Produkter.Where(p => p.Equals(product)).SingleOrDefault().Antal - amount);
+            db.SaveChanges();
+        }
+        public static void VisaVarukorg()
+        {
+            var db = new RasmusABContext();
+
+            var varukorgsprodukter = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().Varukorgsprodukts.ToList();
+            int index = 1;
+            foreach(var varukorgsprodukt in varukorgsprodukter)
+            {
+                var produkt = db.Produkter.Where(p => p.Id == varukorgsprodukt.ProduktId).SingleOrDefault();
+                Console.WriteLine(index + ". " + produkt.Namn + " " + produkt.Färg + " " + varukorgsprodukt.Antal + " " + produkt.Pris);
+                index++;
+            }
+            Console.WriteLine("Ändra produkt = 1");
+            Console.WriteLine("Ta bort produkt = 2");
+            Console.WriteLine("Gå vidare till frakt = 3");
+            Console.WriteLine("Tillbaka = 4");
+
+            int choise = int.Parse(Console.ReadKey().KeyChar.ToString());
+
+            switch(choise)
+            {
+                case 1:
+                    Console.WriteLine("Välj produkt att ändra antal på: ");
+                    var chosenProductAmount = int.Parse(Console.ReadLine());
+                    ÄndraAntalIVarukorg(varukorgsprodukter[chosenProductAmount].Produkt.Namn);
+                    break;
+                case 2:
+                    var chosenProductDelete = int.Parse(Console.ReadLine());
+                    TaBortProduktIVarukorg(varukorgsprodukter[chosenProductDelete].Produkt.Namn);
+                    break;
+                case 3:
+                    Frakt();
+                    break;
+                case 4:
+                    break;
+            }
+
+        }
+        public static void Frakt()
+        {
+            var db = new RasmusABContext();
+
+            
+
+            Console.WriteLine("Ange Namn: ");
+            var name = Console.ReadLine();
+            Console.WriteLine("Ange Adress: ");
+            Console.WriteLine("Gata: ");
+            var street = Console.ReadLine();
+            Console.WriteLine("Stad: ");
+            var city = Console.ReadLine();
+            Console.WriteLine("Land: ");
+            var country = Console.ReadLine();
+
+            Console.WriteLine("Välj leverantör: " + "\n" + 
+                              "1. PostNord  49kr" + "\n" +
+                              "2. DHL  29kr");
+            var choise = int.Parse(Console.ReadLine());
+            if (choise == 1)
+            {
+
+            }
+            
+        }
+        public static void ÄndraAntalIVarukorg(string produktnamn)
+        {
+            var db = new RasmusABContext();
+
+            Console.WriteLine("Välj nytt antal: ");
+            var newAmount = int.Parse(Console.ReadLine());
+            int id = db.Produkter.Where(p => p.Namn == produktnamn).SingleOrDefault().Id;
+            db.Varukorgsprodukts.Where(v => v.ProduktId == id).SingleOrDefault().Antal = newAmount;
+            db.SaveChanges();
+        }
+        public static void TaBortProduktIVarukorg(string produktnamn)
+        {
+            var db = new RasmusABContext();
+
+            int id = db.Produkter.Where(p => p.Namn == produktnamn).SingleOrDefault().Id;            
+            db.Remove(db.Varukorgsprodukts.Where(v => v.ProduktId == id).SingleOrDefault());
             db.SaveChanges();
         }
         public static void LäggTillProdukt()
@@ -479,37 +637,51 @@ namespace RasmusAB
             {
                 Console.WriteLine(användare.Username + " - ID: " + användare.Id);
             }
-            bool changeProduct = true;
-            while (changeProduct = true)
+            bool changeanvändare = true;
+            while (changeanvändare == true)
             {
                 Console.WriteLine("Vilken användare vill du ändra? (Skriv AnvändarID)");
                 var chosenUserId = int.Parse(Console.ReadLine());
-                var chosenUser = db.Produkter.Where(p => p.Id == chosenUserId).SingleOrDefault();
+                var chosenUser = db.Användare.Where(a => a.Id == chosenUserId).SingleOrDefault();
 
-                Console.WriteLine(chosenUser.Namn + "\n" + "Nytt namn: ");
+                Console.WriteLine(chosenUser.Username + "\n" + "Nytt namn: ");
                 var newName = Console.ReadLine();
-                chosenUser.Namn = newName;
-                Console.WriteLine(chosenProduct.Färg + "\n" + "Ny färg: ");
-                var newColor = Console.ReadLine();
-                chosenProduct.Färg = newColor;
-                Console.WriteLine(chosenProduct.Antal + "\n" + "Nytt antal: ");
-                var newAmount = int.Parse(Console.ReadLine());
-                Console.WriteLine(chosenProduct.Pris + "\n" + "Nytt pris: ");
-                var newPrice = int.Parse(Console.ReadLine());
-                Console.WriteLine("Ändrad produkt: " + "\n" + newName + "\n" + newColor + "\n" + newAmount + "\n" + newPrice);
+                chosenUser.Username = newName;
+                Console.WriteLine(chosenUser.Password + "\n" + "Nytt lösenord: ");
+                var newPassword = Console.ReadLine();
+                chosenUser.Password = newPassword;
+                Console.WriteLine("Adress: \n" + chosenUser.Gata + "\n" + "Ny gata: ");
+                var newStreet = Console.ReadLine();
+                Console.WriteLine(chosenUser.Stad + "\n" + "Ny stad: ");
+                var newCity = Console.ReadLine();
+                Console.WriteLine(chosenUser.Land + "\n" + "Nytt land: ");
+                var newCountry = Console.ReadLine();
+                Console.WriteLine(chosenUser.Telefonnummer + "\n" + "Nytt telefonnummer: ");
+                var newTel = int.Parse(Console.ReadLine());
+                Console.WriteLine(chosenUser.Email + "\n" + "Ny email: ");
+                var newEmail = Console.ReadLine();
+                chosenUser.Gata = newStreet;
+                chosenUser.Stad = newCity;
+                chosenUser.Land = newCountry;
+                chosenUser.Telefonnummer = newTel;
+                chosenUser.Email = newEmail;
+
+                Console.WriteLine("Ändrad användare: " + "\n" + newName + "\n" + newPassword + "\n" + "Adress: " + newStreet + " " + newCity + " " + newCountry + "\n" + "+46" + newTel + "\n" + newEmail);
 
                 Console.WriteLine("Vill du spara? (J/N)");
                 var answer = Console.ReadLine();
                 if (answer == "J")
                 {
                     db.SaveChanges();
-                    changeProduct = false;
+                    changeanvändare = false;
                 }
                 if (answer == "N")
                 {
-
+                    
                 }
             }
+
+        }
         //public static void PrintMenu()
         //{
         //    Console.WriteLine("Välkommen till Rasmus AB!");
@@ -703,7 +875,6 @@ namespace RasmusAB
             db.Database.ExecuteSqlRaw($"TRUNCATE TABLE [{tabellensNamn}]");
             db.SaveChanges();
         }
-
 
     }
 }

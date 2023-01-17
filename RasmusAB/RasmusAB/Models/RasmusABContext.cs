@@ -11,6 +11,7 @@ namespace RasmusAB.Models
         public DbSet<Order> Ordrar { get; set; }
         public DbSet<Produkt> Produkter { get; set; }
         public DbSet<Kategori> Kategorier { get; set; }
+        public DbSet<Varukorgsprodukt> Varukorgsprodukts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
