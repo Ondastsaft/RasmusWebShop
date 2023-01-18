@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RasmusAB.Models;
-using System.Runtime.InteropServices;
 
 namespace RasmusAB
 {
@@ -215,34 +214,39 @@ namespace RasmusAB
                     }
                     else if (Program.IsAdmin != true)
                     {
-                        Console.WriteLine($"{(int)MenyKund.ShowCategory}. Visa Kategorier");
-                        Console.WriteLine($"{(int)MenyKund.SearchProduct}. Sök Produkt");
-                        Console.WriteLine($"{(int)MenyKund.ShopingCart}. Varukorg");
-                        Console.WriteLine($"{(int)MenyKund.Quit}. Avsluta");
+                        bool loop = true;
+                        while (loop)
+                        {
+                            Console.WriteLine($"{(int)MenyKund.ShowCategory}. Visa Kategorier");
+                            Console.WriteLine($"{(int)MenyKund.SearchProduct}. Sök Produkt");
+                            Console.WriteLine($"{(int)MenyKund.ShopingCart}. Varukorg");
+                            Console.WriteLine($"{(int)MenyKund.Quit}. Avsluta");
 
-                        MenyKund menuCustomer = (MenyKund)99; // Default
-                        if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
-                        {
-                            menuCustomer = (MenyKund)nr;
-                            Console.Clear();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Fel inmatning");
-                        }
-                        switch (menuCustomer)
-                        {
-                            case MenyKund.ShowCategory:
-                                VisaKategori();
-                                break;
-                            case MenyKund.SearchProduct:
+                            MenyKund menuCustomer = (MenyKund)99; // Default
+                            if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
+                            {
+                                menuCustomer = (MenyKund)nr;
+                                Console.Clear();
+                            }
+                            else
+                            {
+                                Console.WriteLine("Fel inmatning");
+                            }
+                            switch (menuCustomer)
+                            {
+                                case MenyKund.ShowCategory:
+                                    VisaKategori();
+                                    break;
+                                case MenyKund.SearchProduct:
 
-                                break;
-                            case MenyKund.ShopingCart:
-                                VisaVarukorg();
-                                break;
-                            case MenyKund.Quit:
-                                break;
+                                    break;
+                                case MenyKund.ShopingCart:
+                                    VisaVarukorg();
+                                    break;
+                                case MenyKund.Quit:
+                                    loop = false;
+                                    break;
+                            }
                         }
                     }
                     {
@@ -545,7 +549,7 @@ namespace RasmusAB
             double moms = db.Ordrar.Where(o => o.VarukorgsId == varukorgsId).SingleOrDefault().Moms;
             Console.WriteLine("Ordersumma total = " + orderSumma + "var av moms = " + moms);
         }
-    
+
         public static void ÄndraAntalIVarukorg(string produktnamn)
         {
             var db = new RasmusABContext();

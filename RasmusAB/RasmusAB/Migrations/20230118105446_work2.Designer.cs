@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -11,9 +12,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230118105446_work2")]
+    partial class work2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,7 +184,7 @@ namespace RasmusAB.Migrations
                     b.Property<int?>("AnvändarId")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProduktId")
@@ -195,7 +197,8 @@ namespace RasmusAB.Migrations
                         .HasFilter("[AnvändarId] IS NOT NULL");
 
                     b.HasIndex("OrderId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
 
                     b.HasIndex("ProduktId");
 
@@ -258,9 +261,7 @@ namespace RasmusAB.Migrations
 
                     b.HasOne("RasmusAB.Models.Order", "Order")
                         .WithOne("Varukorg")
-                        .HasForeignKey("RasmusAB.Models.Varukorg", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RasmusAB.Models.Varukorg", "OrderId");
 
                     b.HasOne("RasmusAB.Models.Produkt", null)
                         .WithMany("Varukorgs")

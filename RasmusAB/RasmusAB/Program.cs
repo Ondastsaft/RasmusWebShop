@@ -15,21 +15,21 @@ namespace RasmusAB
             Methods.LäggTillTestprodukter();
             Methods.SkapaLeverantör();
             bool quit = false;
-            AnvändarId = 1;
+            //AnvändarId = 1;
 
-            //while (quit != true)
-            //{
-            //    //Methods.ÄndraProdukt();
-            //    quit = Methods.RunMe();
-            //    //Methods.LäggTillAnvändare();
-            //    //Methods.LäggTillKategori();
-            //    //Methods.LäggTillTestprodukter();
-            //    //Methods.RensaTabell("Varukorgar");
-            //    //Methods.RensaTabell("Användare");
-            //    //Methods.LäggProduktIVarukorg(2);
-            //}
+            while (quit != true)
+            {
 
+                quit = Methods.RunMe();
+
+            }
         }
-
+        //    //Methods.ÄndraProdukt();
+        //    //Methods.LäggTillAnvändare();
+        //    //Methods.LäggTillKategori();
+        //    //Methods.LäggTillTestprodukter();
+        //    //Methods.RensaTabell("Varukorgar");
+        //    //Methods.RensaTabell("Användare");
+        //    //Methods.LäggProduktIVarukorg(2);
     }
 }
