@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -11,9 +12,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230118163539_ordersordersmeraorders15")]
+    partial class ordersordersmeraorders15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +115,7 @@ namespace RasmusAB.Migrations
                     b.Property<string>("BetalningsUppgifter")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LeverantörsId")
+                    b.Property<int>("LeverantörsId")
                         .HasColumnType("int");
 
                     b.Property<double?>("Moms")
@@ -222,7 +224,9 @@ namespace RasmusAB.Migrations
                 {
                     b.HasOne("RasmusAB.Models.Leverantör", "Leverantör")
                         .WithMany("Orders")
-                        .HasForeignKey("LeverantörsId");
+                        .HasForeignKey("LeverantörsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RasmusAB.Models.Varukorg", "Varukorg")
                         .WithOne("Order")

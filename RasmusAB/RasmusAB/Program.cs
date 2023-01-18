@@ -11,9 +11,10 @@ namespace RasmusAB
         static void Main(string[] args)
         {
             Methods.LäggTillTestKategorier();
+            Methods.SkapaLeverantör();
             Methods.LäggTillAnvändare();
             Methods.LäggTillTestprodukter();
-            Methods.SkapaLeverantör();
+
             bool quit = false;
             //AnvändarId = 1;
 

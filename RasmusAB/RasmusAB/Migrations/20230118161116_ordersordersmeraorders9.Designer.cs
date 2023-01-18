@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -11,9 +12,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230118161116_ordersordersmeraorders9")]
+    partial class ordersordersmeraorders9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +115,10 @@ namespace RasmusAB.Migrations
                     b.Property<string>("BetalningsUppgifter")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LeverantörsId")
+                    b.Property<int>("LeverantörId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LeverantörsId")
                         .HasColumnType("int");
 
                     b.Property<double?>("Moms")
@@ -130,10 +135,7 @@ namespace RasmusAB.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LeverantörsId");
-
-                    b.HasIndex("VarukorgsId")
-                        .IsUnique();
+                    b.HasIndex("LeverantörId");
 
                     b.ToTable("Ordrar");
                 });
@@ -189,6 +191,9 @@ namespace RasmusAB.Migrations
                     b.HasIndex("AnvändarId")
                         .IsUnique();
 
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
                     b.ToTable("Varukorgar");
                 });
 
@@ -222,17 +227,11 @@ namespace RasmusAB.Migrations
                 {
                     b.HasOne("RasmusAB.Models.Leverantör", "Leverantör")
                         .WithMany("Orders")
-                        .HasForeignKey("LeverantörsId");
-
-                    b.HasOne("RasmusAB.Models.Varukorg", "Varukorg")
-                        .WithOne("Order")
-                        .HasForeignKey("RasmusAB.Models.Order", "VarukorgsId")
+                        .HasForeignKey("LeverantörId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Leverantör");
-
-                    b.Navigation("Varukorg");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Produkt", b =>
@@ -254,7 +253,15 @@ namespace RasmusAB.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RasmusAB.Models.Order", "Order")
+                        .WithOne("Varukorg")
+                        .HasForeignKey("RasmusAB.Models.Varukorg", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Användare");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Varukorgsprodukt", b =>
@@ -292,6 +299,12 @@ namespace RasmusAB.Migrations
                     b.Navigation("Orders");
                 });
 
+            modelBuilder.Entity("RasmusAB.Models.Order", b =>
+                {
+                    b.Navigation("Varukorg")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("RasmusAB.Models.Produkt", b =>
                 {
                     b.Navigation("Varukorgsprodukts");
@@ -299,9 +312,6 @@ namespace RasmusAB.Migrations
 
             modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>
                 {
-                    b.Navigation("Order")
-                        .IsRequired();
-
                     b.Navigation("Varukorgsprodukts");
                 });
 #pragma warning restore 612, 618

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -11,9 +12,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230118155225_ordersordersmeraorders5")]
+    partial class ordersordersmeraorders5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +115,7 @@ namespace RasmusAB.Migrations
                     b.Property<string>("BetalningsUppgifter")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LeverantörsId")
+                    b.Property<int?>("LeverantörId")
                         .HasColumnType("int");
 
                     b.Property<double?>("Moms")
@@ -125,15 +127,9 @@ namespace RasmusAB.Migrations
                     b.Property<int?>("Summa")
                         .HasColumnType("int");
 
-                    b.Property<int>("VarukorgsId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("LeverantörsId");
-
-                    b.HasIndex("VarukorgsId")
-                        .IsUnique();
+                    b.HasIndex("LeverantörId");
 
                     b.ToTable("Ordrar");
                 });
@@ -178,6 +174,9 @@ namespace RasmusAB.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("AntalProdukter")
+                        .HasColumnType("int");
+
                     b.Property<int>("AnvändarId")
                         .HasColumnType("int");
 
@@ -188,6 +187,8 @@ namespace RasmusAB.Migrations
 
                     b.HasIndex("AnvändarId")
                         .IsUnique();
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Varukorgar");
                 });
@@ -220,19 +221,9 @@ namespace RasmusAB.Migrations
 
             modelBuilder.Entity("RasmusAB.Models.Order", b =>
                 {
-                    b.HasOne("RasmusAB.Models.Leverantör", "Leverantör")
+                    b.HasOne("RasmusAB.Models.Leverantör", null)
                         .WithMany("Orders")
-                        .HasForeignKey("LeverantörsId");
-
-                    b.HasOne("RasmusAB.Models.Varukorg", "Varukorg")
-                        .WithOne("Order")
-                        .HasForeignKey("RasmusAB.Models.Order", "VarukorgsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Leverantör");
-
-                    b.Navigation("Varukorg");
+                        .HasForeignKey("LeverantörId");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Produkt", b =>
@@ -254,7 +245,15 @@ namespace RasmusAB.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RasmusAB.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Användare");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Varukorgsprodukt", b =>
@@ -299,9 +298,6 @@ namespace RasmusAB.Migrations
 
             modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>
                 {
-                    b.Navigation("Order")
-                        .IsRequired();
-
                     b.Navigation("Varukorgsprodukts");
                 });
 #pragma warning restore 612, 618

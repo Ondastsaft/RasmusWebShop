@@ -26,7 +26,10 @@ namespace RasmusAB
                 Land = "Sverige",
                 Telefonnummer = 0701234567,
                 Email = "Kund@hotmail.com",
-                Varukorg = new Varukorg(),
+                Varukorg = new Varukorg()
+                {
+                    Order = new Order()
+                },
                 IsAdmin = false,
 
             };
@@ -36,7 +39,11 @@ namespace RasmusAB
             {
                 Username = "Admin",
                 Password = "Admin123",
-                Varukorg = new Varukorg(),
+                Varukorg = new Varukorg()
+                {
+                    Order = new Order()
+                }
+                ,
                 IsAdmin = true,
 
             };
@@ -489,7 +496,8 @@ namespace RasmusAB
             }
             int varukorgsid = 0;
             varukorgsid = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().Id;
-            var order = db.Ordrar.Where(o => o.VarukorgsId == varukorgsid).SingleOrDefault();
+            var order = new Order();
+            //db.Ordrar.Where(o => o.VarukorgsId == varukorgsid).SingleOrDefault();
 
             foreach (var leverantör in db.Leverantörer)
             {
@@ -497,7 +505,7 @@ namespace RasmusAB
             }
             Console.WriteLine("Välj en leverantör (Id)");
             var choise = int.Parse(Console.ReadLine());
-            order.leverantör = db.Leverantörer.Where(L => L.Id == choise).SingleOrDefault();
+            //order.leverantör = db.Leverantörer.Where(L => L.Id == choise).SingleOrDefault();
             db.SaveChanges();
             Console.WriteLine("Slutför beställning? (J/N)");
             var choice = Console.ReadLine();

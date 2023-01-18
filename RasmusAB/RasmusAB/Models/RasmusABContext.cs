@@ -21,8 +21,10 @@ namespace RasmusAB.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Användare>().HasOne(a => a.Varukorg).WithOne(v => v.Användare).HasForeignKey<Varukorg>(v => v.AnvändarId);
-            //modelBuilder.Entity<Varukorg>().HasOne(v => v.Användare).WithOne(a => a.AnvändareVarukorg).HasForeignKey<Användare>(a => a.Id);
-
+            modelBuilder.Entity<Order>().HasOne(l => l.Leverantör).WithMany(o => o.Orders).HasForeignKey(l => l.LeverantörsId);
+            modelBuilder.Entity<Order>().HasOne(v => v.Varukorg).WithOne(o => o.Order).HasForeignKey<Varukorg>(v => v.OrderId);
+            modelBuilder.Entity<Leverantör>().HasMany(o => o.Orders).WithOne(l => l.Leverantör).HasForeignKey(o => o.LeverantörsId);
+            modelBuilder.Entity<Varukorg>().HasOne(o => o.Order).WithOne(v => v.Varukorg).HasForeignKey<Order>(o => o.VarukorgsId);
         }
 
     }
