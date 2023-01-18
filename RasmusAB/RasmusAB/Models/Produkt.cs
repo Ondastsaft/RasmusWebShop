@@ -9,21 +9,13 @@
         public int Pris { get; set; }
         public int Antal { get; set; }
         public Kategori Kategori { get; set; }
-        public virtual ICollection<Varukorg> Varukorgs { get; set; }
+        public virtual ICollection<Varukorgsprodukt> Varukorgsprodukts { get; set; }
 
         public Produkt()
         {
-            Varukorgs = new List<Varukorg>();
+            Varukorgsprodukts = new HashSet<Varukorgsprodukt>();
         }
 
-        //public Produkt(string name, int categoryId, string colour, int price, int antal)
-        //{
-        //    name = Namn;
-        //    categoryId = KategoriId;
-        //    colour = Färg;
-        //    price = Pris;
-        //    antal = Antal;  
-        //}
 
     }
 }

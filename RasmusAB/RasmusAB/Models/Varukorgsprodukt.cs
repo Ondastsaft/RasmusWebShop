@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RasmusAB.Models
+﻿namespace RasmusAB.Models
 {
     public class Varukorgsprodukt
     {
@@ -12,6 +6,8 @@ namespace RasmusAB.Models
         public Produkt Produkt { get; set; }
         public int ProduktId { get; set; }
         public int Antal { get; set; }
+        public Varukorg Varukorg { get; set; }
+        public int VarukorgId { get; set; }
 
     }
 }

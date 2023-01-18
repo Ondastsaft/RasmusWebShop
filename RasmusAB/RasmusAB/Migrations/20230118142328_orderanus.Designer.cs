@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -11,9 +12,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230118142328_orderanus")]
+    partial class orderanus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,12 +186,18 @@ namespace RasmusAB.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProduktId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AnvändarId")
                         .IsUnique();
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.HasIndex("ProduktId");
 
                     b.ToTable("Varukorgar");
                 });
@@ -208,7 +216,7 @@ namespace RasmusAB.Migrations
                     b.Property<int>("ProduktId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VarukorgId")
+                    b.Property<int?>("VarukorgId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -249,10 +257,14 @@ namespace RasmusAB.Migrations
                         .IsRequired();
 
                     b.HasOne("RasmusAB.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
+                        .WithOne("Varukorg")
+                        .HasForeignKey("RasmusAB.Models.Varukorg", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("RasmusAB.Models.Produkt", null)
+                        .WithMany("Varukorgs")
+                        .HasForeignKey("ProduktId");
 
                     b.Navigation("Användare");
 
@@ -262,20 +274,16 @@ namespace RasmusAB.Migrations
             modelBuilder.Entity("RasmusAB.Models.Varukorgsprodukt", b =>
                 {
                     b.HasOne("RasmusAB.Models.Produkt", "Produkt")
-                        .WithMany("Varukorgsprodukts")
+                        .WithMany()
                         .HasForeignKey("ProduktId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RasmusAB.Models.Varukorg", "Varukorg")
+                    b.HasOne("RasmusAB.Models.Varukorg", null)
                         .WithMany("Varukorgsprodukts")
-                        .HasForeignKey("VarukorgId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VarukorgId");
 
                     b.Navigation("Produkt");
-
-                    b.Navigation("Varukorg");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Användare", b =>
@@ -294,9 +302,15 @@ namespace RasmusAB.Migrations
                     b.Navigation("Orders");
                 });
 
+            modelBuilder.Entity("RasmusAB.Models.Order", b =>
+                {
+                    b.Navigation("Varukorg")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("RasmusAB.Models.Produkt", b =>
                 {
-                    b.Navigation("Varukorgsprodukts");
+                    b.Navigation("Varukorgs");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>

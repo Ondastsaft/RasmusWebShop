@@ -20,7 +20,7 @@ namespace RasmusAB.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Användare>().HasOne(a => a.AnvändareVarukorg).WithOne(v => v.Användare).HasForeignKey<Varukorg>(v => v.AnvändarId);
+            modelBuilder.Entity<Användare>().HasOne(a => a.Varukorg).WithOne(v => v.Användare).HasForeignKey<Varukorg>(v => v.AnvändarId);
             //modelBuilder.Entity<Varukorg>().HasOne(v => v.Användare).WithOne(a => a.AnvändareVarukorg).HasForeignKey<Användare>(a => a.Id);
 
         }

@@ -10,7 +10,7 @@ namespace RasmusAB
 
         static void Main(string[] args)
         {
-            //Methods.LäggTillKategori();
+            Methods.LäggTillTestKategorier();
             Methods.LäggTillAnvändare();
             Methods.LäggTillTestprodukter();
             Methods.SkapaLeverantör();
@@ -24,6 +24,9 @@ namespace RasmusAB
 
             }
         }
+
+
+
         //    //Methods.ÄndraProdukt();
         //    //Methods.LäggTillAnvändare();
         //    //Methods.LäggTillKategori();
@@ -32,4 +35,6 @@ namespace RasmusAB
         //    //Methods.RensaTabell("Användare");
         //    //Methods.LäggProduktIVarukorg(2);
     }
+
+
 }
