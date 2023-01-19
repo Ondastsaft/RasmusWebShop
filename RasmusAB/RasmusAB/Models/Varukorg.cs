@@ -4,13 +4,12 @@
     {
         public int Id { get; set; }
         public virtual ICollection<Varukorgsprodukt> Varukorgsprodukts { get; set; }
-        public virtual Användare Användare { get; set; }
         public int? AnvändarId { get; set; }
-        public virtual Order Order { get; set; }
         public int? OrderId { get; set; }
         public Varukorg()
         {
             Varukorgsprodukts = new HashSet<Varukorgsprodukt>();
+
         }
 
 

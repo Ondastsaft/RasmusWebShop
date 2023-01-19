@@ -12,8 +12,8 @@ namespace RasmusAB
         {
             //Methods.LäggTillTestKategorier();
             //Methods.SkapaLeverantör();
-            Methods.LäggTillAnvändare();
-            Methods.LäggTillTestprodukter();
+            //Methods.LäggTillAnvändare();
+            //Methods.LäggTillTestprodukter();
 
             bool quit = false;
             //AnvändarId = 1;

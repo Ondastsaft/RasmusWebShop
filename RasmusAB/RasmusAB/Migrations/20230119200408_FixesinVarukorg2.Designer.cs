@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -11,9 +12,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230119200408_FixesinVarukorg2")]
+    partial class FixesinVarukorg2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,14 +193,12 @@ namespace RasmusAB.Migrations
                     b.Property<int?>("AnvändarId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId")
-                        .IsUnique()
-                        .HasFilter("[OrderId] IS NOT NULL");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Varukorgar");
                 });
@@ -262,9 +262,13 @@ namespace RasmusAB.Migrations
 
             modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>
                 {
-                    b.HasOne("RasmusAB.Models.Order", null)
-                        .WithOne("Varukorg")
-                        .HasForeignKey("RasmusAB.Models.Varukorg", "OrderId");
+                    b.HasOne("RasmusAB.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Varukorgsprodukt", b =>
@@ -294,11 +298,6 @@ namespace RasmusAB.Migrations
             modelBuilder.Entity("RasmusAB.Models.Leverantör", b =>
                 {
                     b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("RasmusAB.Models.Order", b =>
-                {
-                    b.Navigation("Varukorg");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Produkt", b =>
