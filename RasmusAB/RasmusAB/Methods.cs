@@ -496,7 +496,7 @@ namespace RasmusAB
                 Program.AnvändarId = Id;
             }
             int varukorgsid = 0;
-            varukorgsid = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().Id;
+            varukorgsid = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).FirstOrDefault().Id;
             var order = new Order();
             order.VarukorgsId = varukorgsid;
 
@@ -525,7 +525,7 @@ namespace RasmusAB
             }
 
             db.Ordrar.Add(order);
-            db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().OrderId = order.Id;
+            db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).FirstOrDefault().OrderId = order.Id;
             db.SaveChanges();
 
         }
@@ -543,7 +543,7 @@ namespace RasmusAB
         public static void SummeraVarukorg()
         {
             var db = new RasmusABContext();
-            var varukorgsId = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().Id;
+            var varukorgsId = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).FirstOrDefault().Id;
 
             var varukorgsprodukter = db.Varukorgsprodukts.Where(v => v.VarukorgId == varukorgsId).ToList();
             int index = 1;
