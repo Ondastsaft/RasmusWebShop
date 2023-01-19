@@ -497,7 +497,7 @@ namespace RasmusAB
             int varukorgsid = 0;
             varukorgsid = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).SingleOrDefault().Id;
             var order = new Order();
-            //db.Ordrar.Where(o => o.VarukorgsId == varukorgsid).SingleOrDefault();
+            order = db.Ordrar.Where(o => o.VarukorgsId == varukorgsid).SingleOrDefault();
 
             foreach (var leverantör in db.Leverantörer)
             {

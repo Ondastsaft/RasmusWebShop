@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -11,9 +12,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230119073916_funkanuordrar")]
+    partial class funkanuordrar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,10 +197,10 @@ namespace RasmusAB.Migrations
                     b.Property<int>("Antal")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProduktId")
+                    b.Property<int>("ProduktId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("VarukorgId")
+                    b.Property<int>("VarukorgId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -249,11 +251,15 @@ namespace RasmusAB.Migrations
                 {
                     b.HasOne("RasmusAB.Models.Produkt", "Produkt")
                         .WithMany("Varukorgsprodukts")
-                        .HasForeignKey("ProduktId");
+                        .HasForeignKey("ProduktId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RasmusAB.Models.Varukorg", "Varukorg")
                         .WithMany("Varukorgsprodukts")
-                        .HasForeignKey("VarukorgId");
+                        .HasForeignKey("VarukorgId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Produkt");
 

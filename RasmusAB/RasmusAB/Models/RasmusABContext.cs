@@ -13,7 +13,6 @@ namespace RasmusAB.Models
         public DbSet<Kategori> Kategorier { get; set; }
         public DbSet<Varukorgsprodukt> Varukorgsprodukts { get; set; }
         public DbSet<Leverantör> Leverantörer { get; set; }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server = tcp:rasmusab.database.windows.net, 1433; Initial Catalog = DBRasmusABWebshop; Persist Security Info = False; User ID = RasmusABGrupp7; Password =Admin123; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
@@ -24,8 +23,7 @@ namespace RasmusAB.Models
             modelBuilder.Entity<Order>().HasOne(l => l.Leverantör).WithMany(o => o.Orders).HasForeignKey(l => l.LeverantörsId);
             modelBuilder.Entity<Order>().HasOne(v => v.Varukorg).WithOne(o => o.Order).HasForeignKey<Varukorg>(v => v.OrderId);
             modelBuilder.Entity<Leverantör>().HasMany(o => o.Orders).WithOne(l => l.Leverantör).HasForeignKey(o => o.LeverantörsId);
-            modelBuilder.Entity<Varukorg>().HasOne(o => o.Order).WithOne(v => v.Varukorg).HasForeignKey<Order>(o => o.VarukorgsId);
+            modelBuilder.Entity<Varukorg>().HasOne(o => o.Order).WithOne(v => v.Varukorg).HasForeignKey<Order>(o => o.Id);
         }
-
     }
 }
