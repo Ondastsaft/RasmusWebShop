@@ -26,10 +26,6 @@ namespace RasmusAB
                 Land = "Sverige",
                 Telefonnummer = 0701234567,
                 Email = "Kund@hotmail.com",
-                Varukorg = new Varukorg()
-                {
-                    Order = new Order()
-                },
                 IsAdmin = false,
 
             };
@@ -39,11 +35,6 @@ namespace RasmusAB
             {
                 Username = "Admin",
                 Password = "Admin123",
-                Varukorg = new Varukorg()
-                {
-                    Order = new Order()
-                }
-                ,
                 IsAdmin = true,
 
             };

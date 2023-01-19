@@ -10,8 +10,8 @@ namespace RasmusAB
 
         static void Main(string[] args)
         {
-            Methods.LäggTillTestKategorier();
-            Methods.SkapaLeverantör();
+            //Methods.LäggTillTestKategorier();
+            //Methods.SkapaLeverantör();
             Methods.LäggTillAnvändare();
             Methods.LäggTillTestprodukter();
 
