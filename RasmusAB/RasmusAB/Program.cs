@@ -16,12 +16,24 @@ namespace RasmusAB
             //Methods.LäggTillTestprodukter();
 
             bool quit = false;
-            //AnvändarId = 1;
+            AnvändarId = 0;
 
             while (quit != true)
             {
+                if (AnvändarId == 0)
+                {
+                    quit = Methods.StartMeny();
 
-                quit = Methods.RunMe();
+                }
+                else if (IsAdmin == true)
+                {
+                    Methods.AdminMeny();
+                }
+
+                else
+                {
+                    Methods.KundMeny();
+                }
 
             }
         }

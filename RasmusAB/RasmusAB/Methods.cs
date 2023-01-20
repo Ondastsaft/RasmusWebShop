@@ -5,6 +5,306 @@ namespace RasmusAB
 {
     internal class Methods
     {
+        enum MenuList
+        {
+            ShowCategory = 1,
+            SearchProduct,
+            Login,
+
+            Quit = 9
+        }
+        enum MenyKund
+        {
+            ShowCategory = 1,
+            SearchProduct,
+            ShopingCart,
+
+            Quit = 9
+        }
+        enum MenuListAdmin
+        {
+            Produkt = 1,
+            Kategori,
+            Kunder,
+            Quit = 9
+
+        }
+        enum ProduktMenyAdmin
+        {
+            Lägg_Till_produkt = 1,
+            Ändra_Produkt,
+            Ta_Bort_Produkt,
+            Avsluta
+
+        }
+        enum KategoriMenyAdmin
+        {
+            Lägg_Till_Kategori = 1,
+            Ta_Bort_Kategori
+        }
+        enum KundMenyAdmin
+        {
+            Ändra_Kunduppgift = 1,
+        }
+        public static void Run()
+        {
+
+        }
+        public static bool StartMeny()
+        {
+            bool quit = false;
+
+            Console.WriteLine($"Välkommen till Rasmus AB!");
+
+            Console.WriteLine($"{(int)MenuList.ShowCategory}. Kategorier");
+            Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
+            Console.WriteLine($"{(int)MenuList.Login}. Logga in");
+            Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
+
+            int nr;
+            MenuList menu = (MenuList)66; // Default
+            if (int.TryParse(Console.ReadLine(), out nr))
+            {
+                menu = (MenuList)nr;
+                Console.Clear();
+            }
+            else
+            {
+                FelaktigInmatning();
+                StartMeny();
+            }
+
+            switch (menu)
+            {
+                case MenuList.ShowCategory:
+                    VisaKategori();
+                    break;
+                case MenuList.SearchProduct:
+                    Console.WriteLine("Sök produkt");
+                    break;
+                case MenuList.Login:
+                    LogIn();
+                    break;
+                case MenuList.Quit:
+                    Console.WriteLine("Programmet avslutas");
+                    Console.WriteLine("tryck valfri tangent för att fortsätta");
+                    quit = true;
+                    break;
+            }
+            return quit;
+        }
+        public static void AdminProduktMeny()
+        {
+
+            int nr;
+            ProduktMenyAdmin ProduktMenuAdmin = (ProduktMenyAdmin)99; // Default
+
+            Console.WriteLine($"{(int)ProduktMenyAdmin.Lägg_Till_produkt}. Lägg till Produkt");
+            Console.WriteLine($"{(int)ProduktMenyAdmin.Ändra_Produkt}. Ändra Produkt");
+            Console.WriteLine($"{(int)ProduktMenyAdmin.Ta_Bort_Produkt}. Ta bort Produkt");
+            Console.WriteLine($"{(int)ProduktMenyAdmin.Avsluta}. Avsluta");
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out nr))
+                {
+                    ProduktMenuAdmin = (ProduktMenyAdmin)nr;
+                    Console.Clear();
+                }
+                else
+                {
+                    Console.WriteLine("Fel inmatning");
+                }
+
+                switch (ProduktMenuAdmin)
+                {
+                    case ProduktMenyAdmin.Lägg_Till_produkt:
+                        LäggTillProdukt();
+                        break;
+                    case ProduktMenyAdmin.Ändra_Produkt:
+                        ÄndraProdukt();
+                        break;
+                    case ProduktMenyAdmin.Ta_Bort_Produkt:
+                        TaBortProdukt();
+                        break;
+                    case ProduktMenyAdmin.Avsluta:
+                        break;
+                }
+            }
+
+        }
+        public static void AdminKategoriMeny()
+        {
+            int nr;
+            KategoriMenyAdmin KategoriMenuAdmin = (KategoriMenyAdmin)99; // Default
+
+            Console.WriteLine($"{(int)KategoriMenyAdmin.Lägg_Till_Kategori}. Lägg till Kategori");
+            Console.WriteLine($"{(int)KategoriMenyAdmin.Ta_Bort_Kategori}. Ta bort Kategori");
+
+            if (int.TryParse(Console.ReadLine(), out nr))
+            {
+                KategoriMenuAdmin = (KategoriMenyAdmin)nr;
+                Console.Clear();
+            }
+            else
+            {
+                FelaktigInmatning();
+                AdminKategoriMeny();
+            }
+            switch (KategoriMenuAdmin)
+            {
+                case KategoriMenyAdmin.Lägg_Till_Kategori:
+                    LäggTillKategori();
+                    break;
+                case KategoriMenyAdmin.Ta_Bort_Kategori:
+                    TaBortKategori();
+                    break;
+            }
+        }
+        public static void AdminKundMeny()
+        {
+            int nr;
+            KundMenyAdmin KundMenuAdmin = (KundMenyAdmin)99; // Default
+            Console.WriteLine($"{(int)KundMenyAdmin.Ändra_Kunduppgift}. Ändra Kunduppgifter");
+            if (int.TryParse(Console.ReadLine(), out nr))
+            {
+                KundMenuAdmin = (KundMenyAdmin)nr;
+                Console.Clear();
+            }
+            else
+            {
+                FelaktigInmatning();
+                AdminKundMeny();
+            }
+            switch (KundMenuAdmin)
+            {
+                case KundMenyAdmin.Ändra_Kunduppgift:
+                    ÄndraKunduppgifter();
+                    break;
+            }
+
+        }
+        public static void FelaktigInmatning()
+        {
+            Console.WriteLine("Fel inmatning");
+            Console.WriteLine("Tryck valfri tangent för att fortsätta");
+            Console.ReadKey();
+            Console.Clear();
+        }
+        public static void AdminMeny()
+        {
+
+            MenuListAdmin menuAdmin = (MenuListAdmin)99;
+
+            int nr;
+            if (Program.IsAdmin == true)
+            {
+                Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
+                Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
+                Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
+
+
+
+                if (int.TryParse(Console.ReadLine(), out nr))
+                {
+                    menuAdmin = (MenuListAdmin)nr;
+                    Console.Clear();
+                }
+                else
+                {
+                    FelaktigInmatning();
+                    AdminMeny();
+                }
+            }
+            switch (menuAdmin)
+            {
+                case MenuListAdmin.Produkt:
+                    AdminProduktMeny();
+                    break;
+                case MenuListAdmin.Kategori:
+                    AdminKategoriMeny();
+                    break;
+                case MenuListAdmin.Kunder:
+                    AdminKundMeny();
+                    break;
+            }
+        }
+        public static void KundMeny()
+        {
+            bool quit = false;
+            int nr;
+            MenyKund menuCustomer = (MenyKund)99;
+
+            bool loop = true;
+
+            Console.WriteLine($"{(int)MenyKund.ShowCategory}. Visa Kategorier");
+            Console.WriteLine($"{(int)MenyKund.SearchProduct}. Sök Produkt");
+            Console.WriteLine($"{(int)MenyKund.ShopingCart}. Varukorg");
+            Console.WriteLine($"{(int)MenyKund.Quit}. Avsluta");
+            while (loop)
+            {
+
+                // Default
+                if (int.TryParse(Console.ReadLine(), out nr))
+                {
+                    menuCustomer = (MenyKund)nr;
+                    Console.Clear();
+                }
+                else
+                {
+                    FelaktigInmatning();
+                    KundMeny();
+                }
+                switch (menuCustomer)
+                {
+                    case MenyKund.ShowCategory:
+                        VisaKategori();
+                        break;
+                    case MenyKund.SearchProduct:
+                        Console.WriteLine("Sök produkt");
+                        break;
+                    case MenyKund.ShopingCart:
+                        VisaVarukorg();
+                        break;
+                    case MenyKund.Quit:
+                        loop = false;
+                        break;
+                }
+
+            }
+
+
+            //Console.WriteLine($"{(int)MenyKund.ShowCategory}. Kategorier");
+            //Console.WriteLine($"{(int)MenyKund.SearchProduct}. Sök produkt");
+            //Console.WriteLine($"{(int)MenyKund.ShopingCart}. Varukorg");
+            //Console.WriteLine($"{(int)MenyKund.Quit}. Avsluta");
+
+            //MenyKund menuKund = (MenyKund)99; // Default
+            //if (int.TryParse(Console.ReadLine(), out nr))
+            //{
+            //    menuKund = (MenyKund)nr;
+            //    Console.Clear();
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Fel inmatning");
+            //}
+            //switch (menuKund)
+            //{
+            //    case MenyKund.ShowCategory:
+            //        VisaKategori();
+            //        break;
+            //    case MenyKund.SearchProduct:
+            //        break;
+            //    case MenyKund.ShopingCart:
+
+            //        break;
+            //    case MenyKund.Quit:
+            //        break;
+            //}
+
+
+        }
+
         public static void PrintAnvändare()
         {
             var db = new RasmusABContext();
@@ -50,271 +350,140 @@ namespace RasmusAB
             db.SaveChanges();
 
         }
-        enum MenuList
-        {
-            ShowCategory = 1,
-            SearchProduct,
-            Login,
+        //public static bool RunMe()
+        //{
+        //    bool quit = false;
 
-            Quit = 9
-        }
-        enum MenyKund
-        {
-            ShowCategory = 1,
-            SearchProduct,
-            ShopingCart,
+        //    Console.WriteLine($"Välkommen till Rasmus AB!");
 
-            Quit = 9
-        }
-        enum MenuListAdmin
-        {
-            Produkt = 1,
-            Kategori,
-            Kunder,
-            Quit = 9
+        //    Console.WriteLine($"{(int)MenuList.ShowCategory}. Kategorier");
+        //    Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
+        //    Console.WriteLine($"{(int)MenuList.Login}. Logga in");
+        //    Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
 
-        }
-        enum ProduktMenyAdmin
-        {
-            Lägg_Tiill_produkt = 1,
-            Ändra_Produkt,
-            Ta_Bort_Produkt,
+        //    int nr;
+        //    MenuList menu = (MenuList)99; // Default
+        //    if (int.TryParse(Console.ReadLine(), out nr))
+        //    {
+        //        menu = (MenuList)nr;
+        //        Console.Clear();
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Fel inmatning");
+        //    }
 
-        }
-        enum KategoriMenyAdmin
-        {
-            Lägg_Till_Kategori = 1,
-            Ta_Bort_Kategori
-        }
-        enum KundMenyAdmin
-        {
-            Ändra_Kunduppgift = 1,
-        }
-        public static bool RunMe()
-        {
-            bool quit = false;
+        //    switch (menu)
+        //    {
+        //        case MenuList.ShowCategory:
+        //            VisaKategori();
+        //            break;
+        //        case MenuList.SearchProduct:
+        //            Console.WriteLine("Sök produkt");
+        //            break;
+        //        case MenuList.Login:
+        //            LogIn();
+        //            if (Program.IsAdmin == true)
+        //            {
+        //                Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
+        //                Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
+        //                Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
+        //                Console.WriteLine($"{(int)MenuListAdmin.Quit}. Avsluta");
 
-            Console.WriteLine($"Välkommen till Rasmus AB!");
+        //                MenuListAdmin menuAdmin = (MenuListAdmin)99; // Default
+        //                if (int.TryParse(Console.ReadLine(), out nr))
+        //                {
+        //                    menuAdmin = (MenuListAdmin)nr;
+        //                    Console.Clear();
+        //                }
+        //                else
+        //                {
+        //                    Console.WriteLine("Fel inmatning");
+        //                }
+        //                switch (menuAdmin)
+        //                {
+        //                    case MenuListAdmin.Produkt:
+        //                        ProduktMenyAdmin ProduktMenuAdmin = (ProduktMenyAdmin)99; // Default
 
-            Console.WriteLine($"{(int)MenuList.ShowCategory}. Kategorier");
-            Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
-            Console.WriteLine($"{(int)MenuList.Login}. Logga in");
-            Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
+        //                        Console.WriteLine($"{(int)ProduktMenyAdmin.Lägg_Till_produkt}. Lägg till Produkt");
+        //                        Console.WriteLine($"{(int)ProduktMenyAdmin.Ändra_Produkt}. Ändra Produkt");
+        //                        Console.WriteLine($"{(int)ProduktMenyAdmin.Ta_Bort_Produkt}. Ta bort Produkt");
 
-            int nr;
-            MenuList menu = (MenuList)99; // Default
-            if (int.TryParse(Console.ReadLine(), out nr))
-            {
-                menu = (MenuList)nr;
-                Console.Clear();
-            }
-            else
-            {
-                Console.WriteLine("Fel inmatning");
-            }
+        //                        if (int.TryParse(Console.ReadLine(), out nr))
+        //                        {
+        //                            ProduktMenuAdmin = (ProduktMenyAdmin)nr;
+        //                            Console.Clear();
+        //                        }
+        //                        else
+        //                        {
+        //                            Console.WriteLine("Fel inmatning");
+        //                        }
+        //                        switch (ProduktMenuAdmin)
+        //                        {
+        //                            case ProduktMenyAdmin.Lägg_Till_produkt:
+        //                                LäggTillProdukt();
+        //                                break;
+        //                            case ProduktMenyAdmin.Ändra_Produkt:
+        //                                ÄndraProdukt();
+        //                                break;
+        //                            case ProduktMenyAdmin.Ta_Bort_Produkt:
+        //                                TaBortProdukt();
+        //                                break;
+        //                        }
+        //                        break;
+        //                    case MenuListAdmin.Kategori:
+        //                        KategoriMenyAdmin KategoriMenuAdmin = (KategoriMenyAdmin)99; // Default
 
-            switch (menu)
-            {
-                case MenuList.ShowCategory:
-                    VisaKategori();
-                    break;
-                case MenuList.SearchProduct:
-                    Console.WriteLine("Sök produkt");
-                    break;
-                case MenuList.Login:
-                    LogIn();
-                    if (Program.IsAdmin == true)
-                    {
-                        Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
-                        Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
-                        Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
-                        Console.WriteLine($"{(int)MenuListAdmin.Quit}. Avsluta");
+        //                        Console.WriteLine($"{(int)KategoriMenyAdmin.Lägg_Till_Kategori}. Lägg till Kategori");
+        //                        Console.WriteLine($"{(int)KategoriMenyAdmin.Ta_Bort_Kategori}. Ta bort Kategori");
 
-                        MenuListAdmin menuAdmin = (MenuListAdmin)99; // Default
-                        if (int.TryParse(Console.ReadLine(), out nr))
-                        {
-                            menuAdmin = (MenuListAdmin)nr;
-                            Console.Clear();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Fel inmatning");
-                        }
-                        switch (menuAdmin)
-                        {
-                            case MenuListAdmin.Produkt:
-                                ProduktMenyAdmin ProduktMenuAdmin = (ProduktMenyAdmin)99; // Default
+        //                        if (int.TryParse(Console.ReadLine(), out nr))
+        //                        {
+        //                            KategoriMenuAdmin = (KategoriMenyAdmin)nr;
+        //                            Console.Clear();
+        //                        }
+        //                        else
+        //                        {
+        //                            Console.WriteLine("Fel inmatning");
+        //                        }
+        //                        switch (KategoriMenuAdmin)
+        //                        {
+        //                            case KategoriMenyAdmin.Lägg_Till_Kategori:
+        //                                LäggTillKategori();
+        //                                break;
+        //                            case KategoriMenyAdmin.Ta_Bort_Kategori:
+        //                                TaBortKategori();
+        //                                break;
+        //                        }
+        //                        break;
+        //                    case MenuListAdmin.Kunder:
+        //                        KundMenyAdmin KundMenuAdmin = (KundMenyAdmin)99; // Default
+        //                        Console.WriteLine($"{(int)KundMenyAdmin.Ändra_Kunduppgift}. Ändra Kunduppgifter");
+        //                        if (int.TryParse(Console.ReadLine(), out nr))
+        //                        {
+        //                            KundMenuAdmin = (KundMenyAdmin)nr;
+        //                            Console.Clear();
+        //                        }
+        //                        else
+        //                        {
+        //                            Console.WriteLine("Fel inmatning");
+        //                        }
+        //                        switch (KundMenuAdmin)
+        //                        {
+        //                            case KundMenyAdmin.Ändra_Kunduppgift:
+        //                                ÄndraKunduppgifter();
+        //                                break;
+        //                        }
+        //                        break;
+        //                }
+        //            }
+        //    }
+        //}
 
-                                Console.WriteLine($"{(int)ProduktMenyAdmin.Lägg_Tiill_produkt}. Lägg till Produkt");
-                                Console.WriteLine($"{(int)ProduktMenyAdmin.Ändra_Produkt}. Ändra Produkt");
-                                Console.WriteLine($"{(int)ProduktMenyAdmin.Ta_Bort_Produkt}. Ta bort Produkt");
 
-                                if (int.TryParse(Console.ReadLine(), out nr))
-                                {
-                                    ProduktMenuAdmin = (ProduktMenyAdmin)nr;
-                                    Console.Clear();
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Fel inmatning");
-                                }
-                                switch (ProduktMenuAdmin)
-                                {
-                                    case ProduktMenyAdmin.Lägg_Tiill_produkt:
-                                        LäggTillProdukt();
-                                        break;
-                                    case ProduktMenyAdmin.Ändra_Produkt:
-                                        ÄndraProdukt();
-                                        break;
-                                    case ProduktMenyAdmin.Ta_Bort_Produkt:
-                                        TaBortProdukt();
-                                        break;
-                                }
-                                break;
-                            case MenuListAdmin.Kategori:
-                                KategoriMenyAdmin KategoriMenuAdmin = (KategoriMenyAdmin)99; // Default
 
-                                Console.WriteLine($"{(int)KategoriMenyAdmin.Lägg_Till_Kategori}. Lägg till Kategori");
-                                Console.WriteLine($"{(int)KategoriMenyAdmin.Ta_Bort_Kategori}. Ta bort Kategori");
 
-                                if (int.TryParse(Console.ReadLine(), out nr))
-                                {
-                                    KategoriMenuAdmin = (KategoriMenyAdmin)nr;
-                                    Console.Clear();
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Fel inmatning");
-                                }
-                                switch (KategoriMenuAdmin)
-                                {
-                                    case KategoriMenyAdmin.Lägg_Till_Kategori:
-                                        LäggTillKategori();
-                                        break;
-                                    case KategoriMenyAdmin.Ta_Bort_Kategori:
-                                        TaBortKategori();
-                                        break;
-                                }
-                                break;
-                            case MenuListAdmin.Kunder:
-                                KundMenyAdmin KundMenuAdmin = (KundMenyAdmin)99; // Default
-                                Console.WriteLine($"{(int)KundMenyAdmin.Ändra_Kunduppgift}. Ändra Kunduppgifter");
-                                if (int.TryParse(Console.ReadLine(), out nr))
-                                {
-                                    KundMenuAdmin = (KundMenyAdmin)nr;
-                                    Console.Clear();
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Fel inmatning");
-                                }
-                                switch (KundMenuAdmin)
-                                {
-                                    case KundMenyAdmin.Ändra_Kunduppgift:
-                                        ÄndraKunduppgifter();
-                                        break;
-                                }
-                                break;
-                        }
-                    }
-                    else if (Program.IsAdmin != true)
-                    {
-                        bool loop = true;
-                        while (loop)
-                        {
-                            Console.WriteLine($"{(int)MenyKund.ShowCategory}. Visa Kategorier");
-                            Console.WriteLine($"{(int)MenyKund.SearchProduct}. Sök Produkt");
-                            Console.WriteLine($"{(int)MenyKund.ShopingCart}. Varukorg");
-                            Console.WriteLine($"{(int)MenyKund.Quit}. Avsluta");
 
-                            MenyKund menuCustomer = (MenyKund)99; // Default
-                            if (int.TryParse(Console.ReadLine(), out nr))
-                            {
-                                menuCustomer = (MenyKund)nr;
-                                Console.Clear();
-                            }
-                            else
-                            {
-                                Console.WriteLine("Fel inmatning");
-                            }
-                            switch (menuCustomer)
-                            {
-                                case MenyKund.ShowCategory:
-                                    VisaKategori();
-                                    break;
-                                case MenyKund.SearchProduct:
-
-                                    break;
-                                case MenyKund.ShopingCart:
-                                    VisaVarukorg();
-                                    break;
-                                case MenyKund.Quit:
-                                    loop = false;
-                                    break;
-                            }
-                        }
-                    }
-                    {
-                        Console.WriteLine($"{(int)MenyKund.ShowCategory}. Kategorier");
-                        Console.WriteLine($"{(int)MenyKund.SearchProduct}. Sök produkt");
-                        Console.WriteLine($"{(int)MenyKund.ShopingCart}. Varukorg");
-                        Console.WriteLine($"{(int)MenyKund.Quit}. Avsluta");
-
-                        MenyKund menuKund = (MenyKund)99; // Default
-                        if (int.TryParse(Console.ReadLine(), out nr))
-                        {
-                            menuKund = (MenyKund)nr;
-                            Console.Clear();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Fel inmatning");
-                        }
-                        switch (menuKund)
-                        {
-                            case MenyKund.ShowCategory:
-                                VisaKategori();
-                                break;
-                            case MenyKund.SearchProduct:
-                                break;
-                            case MenyKund.ShopingCart:
-
-                                break;
-                            case MenyKund.Quit:
-                                break;
-                        }
-                    }
-                    break;
-                case MenuList.Quit:
-                    quit = true;
-                    break;
-            }
-            //base.RunMe();
-            return quit;
-        }
-        public static bool RunMeCheckAdmin(bool isadmin)
-        {
-            bool quit = false;
-            if (isadmin)
-            {
-                RunAdmin();
-            }
-            else
-            {
-                RunCustomer();
-            }
-            return quit;
-        }
-        public static bool RunCustomer()
-        {
-            bool quit = false;
-            return quit;
-        }
-        public static bool RunAdmin()
-        {
-            bool quit = false;
-            return quit;
-        }
         public static void VisaKategori()
         {
             var db = new RasmusABContext();
@@ -559,7 +728,6 @@ namespace RasmusAB
             double moms = (orderSumma * 0.2);
             Console.WriteLine("Ordersumma total = " + orderSumma + "var av moms = " + moms);
         }
-
         public static void ÄndraAntalIVarukorg(string produktnamn)
         {
             var db = new RasmusABContext();
