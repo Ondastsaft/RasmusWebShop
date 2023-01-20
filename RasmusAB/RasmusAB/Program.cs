@@ -12,7 +12,7 @@ namespace RasmusAB
         {
             //Methods.LäggTillTestKategorier();
             //Methods.SkapaLeverantör();
-            //Methods.LäggTillAnvändare();
+            //Methods.LäggTillTestAnvändare();
             //Methods.LäggTillTestprodukter();
 
             bool quit = false;
@@ -29,12 +29,10 @@ namespace RasmusAB
                 {
                     Methods.AdminMeny();
                 }
-
                 else
                 {
                     Methods.KundMeny();
                 }
-
             }
         }
 

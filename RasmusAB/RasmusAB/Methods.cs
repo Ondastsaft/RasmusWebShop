@@ -49,6 +49,7 @@ namespace RasmusAB
         //Start
         public static bool StartMeny()
         {
+            Console.Clear();
             bool quit = false;
 
             Console.WriteLine($"Välkommen till Rasmus AB!");
@@ -153,7 +154,7 @@ namespace RasmusAB
         //Admin
         public static void AdminMeny()
         {
-
+            Console.Clear();
             MenuListAdmin menuAdmin = (MenuListAdmin)99;
 
             int nr;
@@ -176,22 +177,26 @@ namespace RasmusAB
                     AdminMeny();
                 }
             }
+
             switch (menuAdmin)
             {
                 case MenuListAdmin.Produkt:
+                    Console.Clear();
                     AdminProduktMeny();
                     break;
                 case MenuListAdmin.Kategori:
+                    Console.Clear();
                     AdminKategoriMeny();
                     break;
                 case MenuListAdmin.Kunder:
+                    Console.Clear();
                     AdminKundMeny();
                     break;
             }
         }
         public static void AdminProduktMeny()
         {
-
+            Console.Clear();
             int nr;
             ProduktMenyAdmin ProduktMenuAdmin = (ProduktMenyAdmin)99; // Default
 
@@ -230,6 +235,7 @@ namespace RasmusAB
         }
         public static void AdminKategoriMeny()
         {
+            Console.Clear();
             int nr;
             KategoriMenyAdmin KategoriMenuAdmin = (KategoriMenyAdmin)99; // Default
 
@@ -258,6 +264,7 @@ namespace RasmusAB
         }
         public static void AdminKundMeny()
         {
+            Console.Clear();
             int nr;
             KundMenyAdmin KundMenuAdmin = (KundMenyAdmin)99; // Default
             Console.WriteLine($"{(int)KundMenyAdmin.Ändra_Kunduppgift}. Ändra Kunduppgifter");
@@ -281,6 +288,7 @@ namespace RasmusAB
         }
         public static void LäggTillProdukt()
         {
+            Console.Clear();
             var db = new RasmusABContext();
 
             //bool IsAdmin = db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().IsAdmin;
@@ -322,6 +330,7 @@ namespace RasmusAB
         }
         public static void ÄndraProdukt()
         {
+            Console.Clear();
             var db = new RasmusABContext();
             foreach (var produkt in db.Produkter)
             {
@@ -362,6 +371,7 @@ namespace RasmusAB
         }
         public static void TaBortProdukt()
         {
+            Console.Clear();
             var db = new RasmusABContext();
             foreach (var produkt in db.Produkter)
             {
@@ -376,6 +386,7 @@ namespace RasmusAB
         }
         public static void LäggTillKategori()
         {
+            Console.Clear();
             var db = new RasmusABContext();
 
             Console.WriteLine("Ange namn: ");
@@ -415,6 +426,7 @@ namespace RasmusAB
         //Kund
         public static void KundMeny()
         {
+            Console.Clear();
             bool quit = false;
             int nr;
             MenyKund menuCustomer = (MenyKund)99;
@@ -431,8 +443,8 @@ namespace RasmusAB
                 // Default
                 if (int.TryParse(Console.ReadLine(), out nr))
                 {
-                    menuCustomer = (MenyKund)nr;
                     Console.Clear();
+                    menuCustomer = (MenyKund)nr;
                 }
                 else
                 {
@@ -497,43 +509,6 @@ namespace RasmusAB
             inloggadAnvändare = db.Användare.Where(u => u.Id == Program.AnvändarId).SingleOrDefault();
             Console.WriteLine(inloggadAnvändare.Username);
         }
-        public static void LäggTillAnvändare()
-        {
-            var db = new RasmusABContext();
-
-            Användare k = new Användare()
-            {
-                Username = "Kund",
-                Password = "Kund123",
-                Namn = "Hassan",
-                Gata = "Kundgatan 1",
-                Stad = "Kundstaden",
-                Land = "Sverige",
-                Telefonnummer = 0701234567,
-                Email = "Kund@hotmail.com",
-                IsAdmin = false,
-
-            };
-            db.Användare.Add(k);
-
-            Användare a = new Användare()
-            {
-                Username = "Admin",
-                Password = "Admin123",
-                Namn = "Hassan",
-                Gata = "Kundgatan 1",
-                Stad = "Kundstaden",
-                Land = "Sverige",
-                Telefonnummer = 0701234567,
-                Email = "Kund@hotmail.com",
-                IsAdmin = true,
-                Varukorg = new Varukorg()
-
-            };
-            db.Användare.Add(a);
-            db.SaveChanges();
-
-        }
         public static void FritextSöka()
         {
             var db = new RasmusABContext();
@@ -544,11 +519,24 @@ namespace RasmusAB
 
             if (foundProducts != null)
             {
+
                 foreach (var p in foundProducts)
                 {
                     Console.WriteLine(p.Id + ". " + p.Namn);
-                }
 
+                }
+                if (Program.AnvändarId != 0)
+                {
+                    Console.WriteLine("Vill du lägga till produkt i din varukorg?");
+                    var choise = Console.ReadLine();
+                    if (choise == "j" || choise == "J")
+                    {
+                        int id;
+                        Console.WriteLine("Ange index för vald produkt");
+                        int.TryParse(Console.ReadLine(), out id);
+                        LäggProduktIVarukorg(id);
+                    }
+                }
             }
             else if (foundProducts == null)
             {
@@ -570,6 +558,7 @@ namespace RasmusAB
             {
                 successfullchoise = int.TryParse(Console.ReadLine(), out val);
             }
+            Console.Clear();
             switch (val)
             {
                 case 1:
@@ -585,6 +574,7 @@ namespace RasmusAB
         }
         public static void VisaProdukter(int foreignKey)
         {
+            Console.Clear();
             var db = new RasmusABContext();
             var result = db.Produkter.Where(p => p.KategoriId == foreignKey);
             int index = 1;
@@ -616,6 +606,7 @@ namespace RasmusAB
         }
         public static void VisaSpecifikProdukt(int produktId)
         {
+            Console.Clear();
             var db = new RasmusABContext();
 
             var product = db.Produkter.Where(p => p.Id == produktId).SingleOrDefault();
@@ -638,6 +629,7 @@ namespace RasmusAB
         }
         public static void LäggProduktIVarukorg(int productId)
         {
+            Console.Clear();
             var db = new RasmusABContext();
             var product = db.Produkter.Where(p => p.Id == productId).SingleOrDefault();
             Console.WriteLine("Välj antal: ");
@@ -647,7 +639,7 @@ namespace RasmusAB
             shopingcartProduct.Antal = amount;
 
 
-            if (Program.AnvändarId != null)
+            if (Program.AnvändarId != 0)
             {
                 shopingcartProduct.Varukorg = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).FirstOrDefault();
                 db.Varukorgsprodukts.Add(shopingcartProduct);
@@ -667,6 +659,7 @@ namespace RasmusAB
         }
         public static void VisaVarukorg()
         {
+            Console.Clear();
             var db = new RasmusABContext();
 
             var varukorgsprodukter = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).FirstOrDefault().Varukorgsprodukts.ToList();
@@ -709,6 +702,7 @@ namespace RasmusAB
         }
         public static void Frakt()
         {
+            Console.Clear();
             var db = new RasmusABContext();
             if (Program.AnvändarId == null)
             {
@@ -740,7 +734,7 @@ namespace RasmusAB
             var order = new Order();
             order.VarukorgsId = varukorgsid;
 
-
+            Console.Clear();
 
             foreach (var leverantör in db.Leverantörer)
             {
@@ -873,6 +867,43 @@ namespace RasmusAB
 
 
         //Dev
+        public static void LäggTillTestAnvändare()
+        {
+            var db = new RasmusABContext();
+
+            Användare k = new Användare()
+            {
+                Username = "Kund",
+                Password = "Kund123",
+                Namn = "Hassan",
+                Gata = "Kundgatan 1",
+                Stad = "Kundstaden",
+                Land = "Sverige",
+                Telefonnummer = 0701234567,
+                Email = "Kund@hotmail.com",
+                IsAdmin = false,
+
+            };
+            db.Användare.Add(k);
+
+            Användare a = new Användare()
+            {
+                Username = "Admin",
+                Password = "Admin123",
+                Namn = "Hassan",
+                Gata = "Kundgatan 1",
+                Stad = "Kundstaden",
+                Land = "Sverige",
+                Telefonnummer = 0701234567,
+                Email = "Kund@hotmail.com",
+                IsAdmin = true,
+                Varukorg = new Varukorg()
+
+            };
+            db.Användare.Add(a);
+            db.SaveChanges();
+
+        }
         public static void LäggTillTestprodukter()
         {
 
