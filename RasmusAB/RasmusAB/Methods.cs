@@ -46,10 +46,7 @@ namespace RasmusAB
         {
             Ändra_Kunduppgift = 1,
         }
-        public static void Run()
-        {
-
-        }
+        //Start
         public static bool StartMeny()
         {
             bool quit = false;
@@ -92,6 +89,105 @@ namespace RasmusAB
                     break;
             }
             return quit;
+        }
+        public static string LäggTillKund()
+        {
+            string name = " ";
+            var db = new RasmusABContext();
+            if (Program.AnvändarId == null)
+            {
+                Console.WriteLine("Ange Namn: ");
+                name = Console.ReadLine();
+                Console.WriteLine("Ange Adress: ");
+                Console.WriteLine("Gata: ");
+                var street = Console.ReadLine();
+                Console.WriteLine("Stad: ");
+                var city = Console.ReadLine();
+                Console.WriteLine("Land: ");
+                var country = Console.ReadLine();
+
+                var användare = new Användare()
+                {
+                    Namn = name,
+                    Gata = street,
+                    Stad = city,
+                    Land = country,
+                };
+                db.Användare.Add(användare);
+                db.SaveChanges();
+            }
+            return name;
+        }
+        public static void LogIn()
+        {
+            Console.WriteLine("Användarnamn: ");
+            string username = Console.ReadLine();
+
+            Console.WriteLine("Lösenord: ");
+            string password = Console.ReadLine();
+
+            var db = new RasmusABContext();
+            var user = db.Användare.Where(u => u.Username == username).FirstOrDefault();
+            if (user != null)
+            {
+                if (user.Password == password && user.Password.Contains("Admin"))
+                {
+                    Program.IsAdmin = true;
+                    Console.WriteLine("Hej " + user.Username + "!");
+                }
+                else if (user.Password == password)
+                {
+                    Program.AnvändarId = user.Id;
+                    Console.WriteLine("Hej " + user.Username + "!");
+                    user.Varukorg = new Varukorg() { AnvändarId = user.Id };
+                    db.SaveChanges();
+                }
+                else
+                {
+                    FelaktigInmatning();
+                    LogIn();
+                }
+            }
+        }
+
+        //Admin
+        public static void AdminMeny()
+        {
+
+            MenuListAdmin menuAdmin = (MenuListAdmin)99;
+
+            int nr;
+            if (Program.IsAdmin == true)
+            {
+                Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
+                Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
+                Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
+
+
+
+                if (int.TryParse(Console.ReadLine(), out nr))
+                {
+                    menuAdmin = (MenuListAdmin)nr;
+                    Console.Clear();
+                }
+                else
+                {
+                    FelaktigInmatning();
+                    AdminMeny();
+                }
+            }
+            switch (menuAdmin)
+            {
+                case MenuListAdmin.Produkt:
+                    AdminProduktMeny();
+                    break;
+                case MenuListAdmin.Kategori:
+                    AdminKategoriMeny();
+                    break;
+                case MenuListAdmin.Kunder:
+                    AdminKundMeny();
+                    break;
+            }
         }
         public static void AdminProduktMeny()
         {
@@ -183,6 +279,130 @@ namespace RasmusAB
             }
 
         }
+        public static void LäggTillProdukt()
+        {
+            var db = new RasmusABContext();
+
+            //bool IsAdmin = db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().IsAdmin;
+            //if (IsAdmin)
+            //{
+            Console.WriteLine("Ange namn: ");
+            string namn = Console.ReadLine();
+
+            Console.WriteLine("Ange färg: ");
+            string färg = Console.ReadLine();
+
+            foreach (var kategori in db.Kategorier)
+            {
+                Console.WriteLine("Id: " + kategori.Id + " - " + kategori.Namn);
+            }
+            Console.WriteLine("Ange kategori-Id: ");
+            int kategoriId = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Ange pris: ");
+            int pris = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Ange antal: ");
+            int antal = int.Parse(Console.ReadLine());
+
+            Produkt nyprodukt = new Produkt()
+            {
+                Namn = namn,
+                Färg = färg,
+                KategoriId = kategoriId,
+                Pris = pris,
+                Antal = antal,
+            };
+            db.Produkter.Add(nyprodukt);
+            db.SaveChanges();
+
+            //}
+
+
+        }
+        public static void ÄndraProdukt()
+        {
+            var db = new RasmusABContext();
+            foreach (var produkt in db.Produkter)
+            {
+                Console.WriteLine(produkt.Namn + " - ID: " + produkt.Id);
+            }
+            bool changeProduct = true;
+            while (changeProduct = true)
+            {
+                Console.WriteLine("Vilken produkt vill du ändra? (Skriv ProduktID)");
+                var chosenProductId = int.Parse(Console.ReadLine());
+                var chosenProduct = db.Produkter.Where(p => p.Id == chosenProductId).SingleOrDefault();
+
+                Console.WriteLine(chosenProduct.Namn + "\n" + "Nytt namn: ");
+                var newName = Console.ReadLine();
+                chosenProduct.Namn = newName;
+                Console.WriteLine(chosenProduct.Färg + "\n" + "Ny färg: ");
+                var newColor = Console.ReadLine();
+                chosenProduct.Färg = newColor;
+                Console.WriteLine(chosenProduct.Antal + "\n" + "Nytt antal: ");
+                var newAmount = int.Parse(Console.ReadLine());
+                Console.WriteLine(chosenProduct.Pris + "\n" + "Nytt pris: ");
+                var newPrice = int.Parse(Console.ReadLine());
+                Console.WriteLine("Ändrad produkt: " + "\n" + newName + "\n" + newColor + "\n" + newAmount + "\n" + newPrice);
+
+                Console.WriteLine("Vill du spara? (J/N)");
+                var answer = Console.ReadLine();
+                if (answer == "J")
+                {
+                    db.SaveChanges();
+                    changeProduct = false;
+                }
+                if (answer == "N")
+                {
+
+                }
+            }
+
+        }
+        public static void TaBortProdukt()
+        {
+            var db = new RasmusABContext();
+            foreach (var produkt in db.Produkter)
+            {
+                Console.WriteLine(produkt.Namn + " - ID: " + produkt.Id);
+            }
+
+            Console.WriteLine("Vilken produkt vill du ta bort? (Skriv ProduktID)");
+            var chosenProductId = int.Parse(Console.ReadLine());
+            var chosenProduct = db.Produkter.Where(p => p.Id == chosenProductId).SingleOrDefault();
+            db.Remove(chosenProduct);
+            db.SaveChanges();
+        }
+        public static void LäggTillKategori()
+        {
+            var db = new RasmusABContext();
+
+            Console.WriteLine("Ange namn: ");
+            string kategoriNamn = Console.ReadLine();
+
+
+            Kategori nyKategori = new Kategori()
+            {
+                Namn = kategoriNamn
+            };
+            db.Kategorier.Add(nyKategori);
+            db.SaveChanges();
+        }
+        public static void TaBortKategori()
+        {
+            var db = new RasmusABContext();
+            foreach (var kategori in db.Kategorier)
+            {
+                Console.WriteLine(kategori.Namn + " - ID: " + kategori.Id);
+            }
+
+            Console.WriteLine("Vilken kategori vill du ta bort? (Skriv KategoriID)");
+            var chosenCategoryId = int.Parse(Console.ReadLine());
+            var chosenCategory = db.Kategorier.Where(k => k.Id == chosenCategoryId).SingleOrDefault();
+            db.Remove(chosenCategory);
+            db.SaveChanges();
+        }
         public static void FelaktigInmatning()
         {
             Console.WriteLine("Fel inmatning");
@@ -190,44 +410,9 @@ namespace RasmusAB
             Console.ReadKey();
             Console.Clear();
         }
-        public static void AdminMeny()
-        {
-
-            MenuListAdmin menuAdmin = (MenuListAdmin)99;
-
-            int nr;
-            if (Program.IsAdmin == true)
-            {
-                Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
-                Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
-                Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
 
 
-
-                if (int.TryParse(Console.ReadLine(), out nr))
-                {
-                    menuAdmin = (MenuListAdmin)nr;
-                    Console.Clear();
-                }
-                else
-                {
-                    FelaktigInmatning();
-                    AdminMeny();
-                }
-            }
-            switch (menuAdmin)
-            {
-                case MenuListAdmin.Produkt:
-                    AdminProduktMeny();
-                    break;
-                case MenuListAdmin.Kategori:
-                    AdminKategoriMeny();
-                    break;
-                case MenuListAdmin.Kunder:
-                    AdminKundMeny();
-                    break;
-            }
-        }
+        //Kund
         public static void KundMeny()
         {
             bool quit = false;
@@ -260,7 +445,7 @@ namespace RasmusAB
                         VisaKategori();
                         break;
                     case MenyKund.SearchProduct:
-                        Console.WriteLine("Sök produkt");
+                        FritextSöka();
                         break;
                     case MenyKund.ShopingCart:
                         VisaVarukorg();
@@ -304,7 +489,6 @@ namespace RasmusAB
 
 
         }
-
         public static void PrintAnvändare()
         {
             var db = new RasmusABContext();
@@ -350,140 +534,27 @@ namespace RasmusAB
             db.SaveChanges();
 
         }
-        //public static bool RunMe()
-        //{
-        //    bool quit = false;
+        public static void FritextSöka()
+        {
+            var db = new RasmusABContext();
 
-        //    Console.WriteLine($"Välkommen till Rasmus AB!");
+            Console.WriteLine("Sök produkt: ");
+            var searchedProduct = Console.ReadLine();
+            var foundProducts = db.Produkter.Where(p => p.Namn.Contains(searchedProduct));
 
-        //    Console.WriteLine($"{(int)MenuList.ShowCategory}. Kategorier");
-        //    Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
-        //    Console.WriteLine($"{(int)MenuList.Login}. Logga in");
-        //    Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
+            if (foundProducts != null)
+            {
+                foreach (var p in foundProducts)
+                {
+                    Console.WriteLine(p.Id + ". " + p.Namn);
+                }
 
-        //    int nr;
-        //    MenuList menu = (MenuList)99; // Default
-        //    if (int.TryParse(Console.ReadLine(), out nr))
-        //    {
-        //        menu = (MenuList)nr;
-        //        Console.Clear();
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Fel inmatning");
-        //    }
-
-        //    switch (menu)
-        //    {
-        //        case MenuList.ShowCategory:
-        //            VisaKategori();
-        //            break;
-        //        case MenuList.SearchProduct:
-        //            Console.WriteLine("Sök produkt");
-        //            break;
-        //        case MenuList.Login:
-        //            LogIn();
-        //            if (Program.IsAdmin == true)
-        //            {
-        //                Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
-        //                Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
-        //                Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
-        //                Console.WriteLine($"{(int)MenuListAdmin.Quit}. Avsluta");
-
-        //                MenuListAdmin menuAdmin = (MenuListAdmin)99; // Default
-        //                if (int.TryParse(Console.ReadLine(), out nr))
-        //                {
-        //                    menuAdmin = (MenuListAdmin)nr;
-        //                    Console.Clear();
-        //                }
-        //                else
-        //                {
-        //                    Console.WriteLine("Fel inmatning");
-        //                }
-        //                switch (menuAdmin)
-        //                {
-        //                    case MenuListAdmin.Produkt:
-        //                        ProduktMenyAdmin ProduktMenuAdmin = (ProduktMenyAdmin)99; // Default
-
-        //                        Console.WriteLine($"{(int)ProduktMenyAdmin.Lägg_Till_produkt}. Lägg till Produkt");
-        //                        Console.WriteLine($"{(int)ProduktMenyAdmin.Ändra_Produkt}. Ändra Produkt");
-        //                        Console.WriteLine($"{(int)ProduktMenyAdmin.Ta_Bort_Produkt}. Ta bort Produkt");
-
-        //                        if (int.TryParse(Console.ReadLine(), out nr))
-        //                        {
-        //                            ProduktMenuAdmin = (ProduktMenyAdmin)nr;
-        //                            Console.Clear();
-        //                        }
-        //                        else
-        //                        {
-        //                            Console.WriteLine("Fel inmatning");
-        //                        }
-        //                        switch (ProduktMenuAdmin)
-        //                        {
-        //                            case ProduktMenyAdmin.Lägg_Till_produkt:
-        //                                LäggTillProdukt();
-        //                                break;
-        //                            case ProduktMenyAdmin.Ändra_Produkt:
-        //                                ÄndraProdukt();
-        //                                break;
-        //                            case ProduktMenyAdmin.Ta_Bort_Produkt:
-        //                                TaBortProdukt();
-        //                                break;
-        //                        }
-        //                        break;
-        //                    case MenuListAdmin.Kategori:
-        //                        KategoriMenyAdmin KategoriMenuAdmin = (KategoriMenyAdmin)99; // Default
-
-        //                        Console.WriteLine($"{(int)KategoriMenyAdmin.Lägg_Till_Kategori}. Lägg till Kategori");
-        //                        Console.WriteLine($"{(int)KategoriMenyAdmin.Ta_Bort_Kategori}. Ta bort Kategori");
-
-        //                        if (int.TryParse(Console.ReadLine(), out nr))
-        //                        {
-        //                            KategoriMenuAdmin = (KategoriMenyAdmin)nr;
-        //                            Console.Clear();
-        //                        }
-        //                        else
-        //                        {
-        //                            Console.WriteLine("Fel inmatning");
-        //                        }
-        //                        switch (KategoriMenuAdmin)
-        //                        {
-        //                            case KategoriMenyAdmin.Lägg_Till_Kategori:
-        //                                LäggTillKategori();
-        //                                break;
-        //                            case KategoriMenyAdmin.Ta_Bort_Kategori:
-        //                                TaBortKategori();
-        //                                break;
-        //                        }
-        //                        break;
-        //                    case MenuListAdmin.Kunder:
-        //                        KundMenyAdmin KundMenuAdmin = (KundMenyAdmin)99; // Default
-        //                        Console.WriteLine($"{(int)KundMenyAdmin.Ändra_Kunduppgift}. Ändra Kunduppgifter");
-        //                        if (int.TryParse(Console.ReadLine(), out nr))
-        //                        {
-        //                            KundMenuAdmin = (KundMenyAdmin)nr;
-        //                            Console.Clear();
-        //                        }
-        //                        else
-        //                        {
-        //                            Console.WriteLine("Fel inmatning");
-        //                        }
-        //                        switch (KundMenuAdmin)
-        //                        {
-        //                            case KundMenyAdmin.Ändra_Kunduppgift:
-        //                                ÄndraKunduppgifter();
-        //                                break;
-        //                        }
-        //                        break;
-        //                }
-        //            }
-        //    }
-        //}
-
-
-
-
-
+            }
+            else if (foundProducts == null)
+            {
+                Console.WriteLine("Tyvärr finns ingen produkt med ditt sökord :(");
+            }
+        }
         public static void VisaKategori()
         {
             var db = new RasmusABContext();
@@ -709,25 +780,6 @@ namespace RasmusAB
             var användare = db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault();
 
         }
-        public static void SummeraVarukorg()
-        {
-            var db = new RasmusABContext();
-            var varukorgsId = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).FirstOrDefault().Id;
-
-            var varukorgsprodukter = db.Varukorgsprodukts.Where(v => v.VarukorgId == varukorgsId).ToList();
-            int index = 1;
-            int orderSumma = 0;
-            foreach (var varukorgsprodukt in varukorgsprodukter)
-            {
-                var produkt = db.Produkter.Where(p => p.Id == varukorgsprodukt.ProduktId).SingleOrDefault();
-                Console.WriteLine(index + ". " + produkt.Namn + " " + produkt.Färg + " " + varukorgsprodukt.Antal + " " + produkt.Pris + " summa " + (varukorgsprodukt.Antal * produkt.Pris));
-                index++;
-                orderSumma = orderSumma + (varukorgsprodukt.Antal * produkt.Pris);
-            }
-            //int varukorgsId = db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().VarukorgsId;
-            double moms = (orderSumma * 0.2);
-            Console.WriteLine("Ordersumma total = " + orderSumma + "var av moms = " + moms);
-        }
         public static void ÄndraAntalIVarukorg(string produktnamn)
         {
             var db = new RasmusABContext();
@@ -744,130 +796,6 @@ namespace RasmusAB
 
             int id = db.Produkter.Where(p => p.Namn == produktnamn).SingleOrDefault().Id;
             db.Remove(db.Varukorgsprodukts.Where(v => v.ProduktId == id).SingleOrDefault());
-            db.SaveChanges();
-        }
-        public static void LäggTillProdukt()
-        {
-            var db = new RasmusABContext();
-
-            //bool IsAdmin = db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().IsAdmin;
-            //if (IsAdmin)
-            //{
-            Console.WriteLine("Ange namn: ");
-            string namn = Console.ReadLine();
-
-            Console.WriteLine("Ange färg: ");
-            string färg = Console.ReadLine();
-
-            foreach (var kategori in db.Kategorier)
-            {
-                Console.WriteLine("Id: " + kategori.Id + " - " + kategori.Namn);
-            }
-            Console.WriteLine("Ange kategori-Id: ");
-            int kategoriId = int.Parse(Console.ReadLine());
-
-            Console.WriteLine("Ange pris: ");
-            int pris = int.Parse(Console.ReadLine());
-
-            Console.WriteLine("Ange antal: ");
-            int antal = int.Parse(Console.ReadLine());
-
-            Produkt nyprodukt = new Produkt()
-            {
-                Namn = namn,
-                Färg = färg,
-                KategoriId = kategoriId,
-                Pris = pris,
-                Antal = antal,
-            };
-            db.Produkter.Add(nyprodukt);
-            db.SaveChanges();
-
-            //}
-
-
-        }
-        public static void ÄndraProdukt()
-        {
-            var db = new RasmusABContext();
-            foreach (var produkt in db.Produkter)
-            {
-                Console.WriteLine(produkt.Namn + " - ID: " + produkt.Id);
-            }
-            bool changeProduct = true;
-            while (changeProduct = true)
-            {
-                Console.WriteLine("Vilken produkt vill du ändra? (Skriv ProduktID)");
-                var chosenProductId = int.Parse(Console.ReadLine());
-                var chosenProduct = db.Produkter.Where(p => p.Id == chosenProductId).SingleOrDefault();
-
-                Console.WriteLine(chosenProduct.Namn + "\n" + "Nytt namn: ");
-                var newName = Console.ReadLine();
-                chosenProduct.Namn = newName;
-                Console.WriteLine(chosenProduct.Färg + "\n" + "Ny färg: ");
-                var newColor = Console.ReadLine();
-                chosenProduct.Färg = newColor;
-                Console.WriteLine(chosenProduct.Antal + "\n" + "Nytt antal: ");
-                var newAmount = int.Parse(Console.ReadLine());
-                Console.WriteLine(chosenProduct.Pris + "\n" + "Nytt pris: ");
-                var newPrice = int.Parse(Console.ReadLine());
-                Console.WriteLine("Ändrad produkt: " + "\n" + newName + "\n" + newColor + "\n" + newAmount + "\n" + newPrice);
-
-                Console.WriteLine("Vill du spara? (J/N)");
-                var answer = Console.ReadLine();
-                if (answer == "J")
-                {
-                    db.SaveChanges();
-                    changeProduct = false;
-                }
-                if (answer == "N")
-                {
-
-                }
-            }
-
-        }
-        public static void TaBortProdukt()
-        {
-            var db = new RasmusABContext();
-            foreach (var produkt in db.Produkter)
-            {
-                Console.WriteLine(produkt.Namn + " - ID: " + produkt.Id);
-            }
-
-            Console.WriteLine("Vilken produkt vill du ta bort? (Skriv ProduktID)");
-            var chosenProductId = int.Parse(Console.ReadLine());
-            var chosenProduct = db.Produkter.Where(p => p.Id == chosenProductId).SingleOrDefault();
-            db.Remove(chosenProduct);
-            db.SaveChanges();
-        }
-        public static void LäggTillKategori()
-        {
-            var db = new RasmusABContext();
-
-            Console.WriteLine("Ange namn: ");
-            string kategoriNamn = Console.ReadLine();
-
-
-            Kategori nyKategori = new Kategori()
-            {
-                Namn = kategoriNamn
-            };
-            db.Kategorier.Add(nyKategori);
-            db.SaveChanges();
-        }
-        public static void TaBortKategori()
-        {
-            var db = new RasmusABContext();
-            foreach (var kategori in db.Kategorier)
-            {
-                Console.WriteLine(kategori.Namn + " - ID: " + kategori.Id);
-            }
-
-            Console.WriteLine("Vilken kategori vill du ta bort? (Skriv KategoriID)");
-            var chosenCategoryId = int.Parse(Console.ReadLine());
-            var chosenCategory = db.Kategorier.Where(k => k.Id == chosenCategoryId).SingleOrDefault();
-            db.Remove(chosenCategory);
             db.SaveChanges();
         }
         public static void ÄndraKunduppgifter()
@@ -923,81 +851,28 @@ namespace RasmusAB
             }
 
         }
-        //public static void PrintMenu()
-        //{
-        //    Console.WriteLine("Välkommen till Rasmus AB!");
-        //    bool loop = true;
-        //    while (loop)
-        //    {
-        //        Console.WriteLine($"{(int)MenuList.ShowProducts}. Kläder");
-        //        Console.WriteLine($"{(int)MenuList.LogIn}. Logga in");
-        //        Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
-        //        Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
-
-        //        //foreach (int i in Enum.GetValues(typeof(MenuList)))
-        //        //{
-        //        //    Console.WriteLine($"{i}. {Enum.GetName(typeof(MenuList), i).Replace('_', ' ')}");
-        //        //}
-
-        //        int nr;
-        //        MenuList menu = (MenuList)99; // Default
-        //        if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
-        //        {
-        //            menu = (MenuList)nr;
-        //            Console.Clear();
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("Fel inmatning");
-        //        }
-
-        //        switch (menu)
-        //        {
-        //            case MenuList.ShowProducts:
-        //                Console.WriteLine("Kläder");
-        //                break;
-        //            case MenuList.LogIn:
-        //                LogIn();
-        //                break;
-        //            case MenuList.SearchProduct:
-        //                Console.WriteLine("Sök produkt");
-        //                break;
-        //            case MenuList.Quit:
-        //                loop = false;
-        //                break;
-        //        }
-        //    }
-        //}
-        public static void LogIn()
+        public static void SummeraVarukorg()
         {
-            Console.WriteLine("Användarnamn: ");
-            string username = "Kund";
-
-            Console.WriteLine("Lösenord: ");
-            string password = "Kund123";
-
             var db = new RasmusABContext();
-            var user = db.Användare.Where(u => u.Username == username).FirstOrDefault();
-            if (user != null)
+            var varukorgsId = db.Varukorgar.Where(v => v.AnvändarId == Program.AnvändarId).FirstOrDefault().Id;
+
+            var varukorgsprodukter = db.Varukorgsprodukts.Where(v => v.VarukorgId == varukorgsId).ToList();
+            int index = 1;
+            int orderSumma = 0;
+            foreach (var varukorgsprodukt in varukorgsprodukter)
             {
-                if (user.Password == password && user.Password.Contains("Admin"))
-                {
-                    Program.IsAdmin = true;
-                    Console.WriteLine("Hej " + user.Username + "!");
-                }
-                else if (user.Password == password)
-                {
-                    Program.AnvändarId = user.Id;
-                    Console.WriteLine("Hej " + user.Username + "!");
-                    user.Varukorg = new Varukorg() { AnvändarId = user.Id };
-                    db.SaveChanges();
-                }
-                else
-                {
-                    Console.WriteLine("Felaktigt namn eller lösenord, försök igen! ");
-                }
+                var produkt = db.Produkter.Where(p => p.Id == varukorgsprodukt.ProduktId).SingleOrDefault();
+                Console.WriteLine(index + ". " + produkt.Namn + " " + produkt.Färg + " " + varukorgsprodukt.Antal + " " + produkt.Pris + " summa " + (varukorgsprodukt.Antal * produkt.Pris));
+                index++;
+                orderSumma = orderSumma + (varukorgsprodukt.Antal * produkt.Pris);
             }
+            //int varukorgsId = db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().VarukorgsId;
+            double moms = (orderSumma * 0.2);
+            Console.WriteLine("Ordersumma total = " + orderSumma + "var av moms = " + moms);
         }
+
+
+        //Dev
         public static void LäggTillTestprodukter()
         {
 
@@ -1170,5 +1045,180 @@ namespace RasmusAB
             db.Kategorier.Add(k2);
             db.SaveChanges();
         }
+        //public static void PrintMenu()
+        //{
+        //    Console.WriteLine("Välkommen till Rasmus AB!");
+        //    bool loop = true;
+        //    while (loop)
+        //    {
+        //        Console.WriteLine($"{(int)MenuList.ShowProducts}. Kläder");
+        //        Console.WriteLine($"{(int)MenuList.LogIn}. Logga in");
+        //        Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
+        //        Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
+
+        //        //foreach (int i in Enum.GetValues(typeof(MenuList)))
+        //        //{
+        //        //    Console.WriteLine($"{i}. {Enum.GetName(typeof(MenuList), i).Replace('_', ' ')}");
+        //        //}
+
+        //        int nr;
+        //        MenuList menu = (MenuList)99; // Default
+        //        if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out nr))
+        //        {
+        //            menu = (MenuList)nr;
+        //            Console.Clear();
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("Fel inmatning");
+        //        }
+
+        //        switch (menu)
+        //        {
+        //            case MenuList.ShowProducts:
+        //                Console.WriteLine("Kläder");
+        //                break;
+        //            case MenuList.LogIn:
+        //                LogIn();
+        //                break;
+        //            case MenuList.SearchProduct:
+        //                Console.WriteLine("Sök produkt");
+        //                break;
+        //            case MenuList.Quit:
+        //                loop = false;
+        //                break;
+        //        }
+        //    }
+        //}
+
+        //public static bool RunMe()
+        //{
+        //    bool quit = false;
+
+        //    Console.WriteLine($"Välkommen till Rasmus AB!");
+
+        //    Console.WriteLine($"{(int)MenuList.ShowCategory}. Kategorier");
+        //    Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
+        //    Console.WriteLine($"{(int)MenuList.Login}. Logga in");
+        //    Console.WriteLine($"{(int)MenuList.Quit}. Avsluta");
+
+        //    int nr;
+        //    MenuList menu = (MenuList)99; // Default
+        //    if (int.TryParse(Console.ReadLine(), out nr))
+        //    {
+        //        menu = (MenuList)nr;
+        //        Console.Clear();
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Fel inmatning");
+        //    }
+
+        //    switch (menu)
+        //    {
+        //        case MenuList.ShowCategory:
+        //            VisaKategori();
+        //            break;
+        //        case MenuList.SearchProduct:
+        //            Console.WriteLine("Sök produkt");
+        //            break;
+        //        case MenuList.Login:
+        //            LogIn();
+        //            if (Program.IsAdmin == true)
+        //            {
+        //                Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
+        //                Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
+        //                Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
+        //                Console.WriteLine($"{(int)MenuListAdmin.Quit}. Avsluta");
+
+        //                MenuListAdmin menuAdmin = (MenuListAdmin)99; // Default
+        //                if (int.TryParse(Console.ReadLine(), out nr))
+        //                {
+        //                    menuAdmin = (MenuListAdmin)nr;
+        //                    Console.Clear();
+        //                }
+        //                else
+        //                {
+        //                    Console.WriteLine("Fel inmatning");
+        //                }
+        //                switch (menuAdmin)
+        //                {
+        //                    case MenuListAdmin.Produkt:
+        //                        ProduktMenyAdmin ProduktMenuAdmin = (ProduktMenyAdmin)99; // Default
+
+        //                        Console.WriteLine($"{(int)ProduktMenyAdmin.Lägg_Till_produkt}. Lägg till Produkt");
+        //                        Console.WriteLine($"{(int)ProduktMenyAdmin.Ändra_Produkt}. Ändra Produkt");
+        //                        Console.WriteLine($"{(int)ProduktMenyAdmin.Ta_Bort_Produkt}. Ta bort Produkt");
+
+        //                        if (int.TryParse(Console.ReadLine(), out nr))
+        //                        {
+        //                            ProduktMenuAdmin = (ProduktMenyAdmin)nr;
+        //                            Console.Clear();
+        //                        }
+        //                        else
+        //                        {
+        //                            Console.WriteLine("Fel inmatning");
+        //                        }
+        //                        switch (ProduktMenuAdmin)
+        //                        {
+        //                            case ProduktMenyAdmin.Lägg_Till_produkt:
+        //                                LäggTillProdukt();
+        //                                break;
+        //                            case ProduktMenyAdmin.Ändra_Produkt:
+        //                                ÄndraProdukt();
+        //                                break;
+        //                            case ProduktMenyAdmin.Ta_Bort_Produkt:
+        //                                TaBortProdukt();
+        //                                break;
+        //                        }
+        //                        break;
+        //                    case MenuListAdmin.Kategori:
+        //                        KategoriMenyAdmin KategoriMenuAdmin = (KategoriMenyAdmin)99; // Default
+
+        //                        Console.WriteLine($"{(int)KategoriMenyAdmin.Lägg_Till_Kategori}. Lägg till Kategori");
+        //                        Console.WriteLine($"{(int)KategoriMenyAdmin.Ta_Bort_Kategori}. Ta bort Kategori");
+
+        //                        if (int.TryParse(Console.ReadLine(), out nr))
+        //                        {
+        //                            KategoriMenuAdmin = (KategoriMenyAdmin)nr;
+        //                            Console.Clear();
+        //                        }
+        //                        else
+        //                        {
+        //                            Console.WriteLine("Fel inmatning");
+        //                        }
+        //                        switch (KategoriMenuAdmin)
+        //                        {
+        //                            case KategoriMenyAdmin.Lägg_Till_Kategori:
+        //                                LäggTillKategori();
+        //                                break;
+        //                            case KategoriMenyAdmin.Ta_Bort_Kategori:
+        //                                TaBortKategori();
+        //                                break;
+        //                        }
+        //                        break;
+        //                    case MenuListAdmin.Kunder:
+        //                        KundMenyAdmin KundMenuAdmin = (KundMenyAdmin)99; // Default
+        //                        Console.WriteLine($"{(int)KundMenyAdmin.Ändra_Kunduppgift}. Ändra Kunduppgifter");
+        //                        if (int.TryParse(Console.ReadLine(), out nr))
+        //                        {
+        //                            KundMenuAdmin = (KundMenyAdmin)nr;
+        //                            Console.Clear();
+        //                        }
+        //                        else
+        //                        {
+        //                            Console.WriteLine("Fel inmatning");
+        //                        }
+        //                        switch (KundMenuAdmin)
+        //                        {
+        //                            case KundMenyAdmin.Ändra_Kunduppgift:
+        //                                ÄndraKunduppgifter();
+        //                                break;
+        //                        }
+        //                        break;
+        //                }
+        //            }
+        //    }
+        //}
     }
 }
