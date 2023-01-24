@@ -207,6 +207,7 @@ namespace RasmusAB
                     Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
                     Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
                     Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
+                    Console.WriteLine($"{(int)MenuListAdmin.Quit}. Avsluta");
 
 
 
@@ -236,7 +237,7 @@ namespace RasmusAB
                             AdminKundMeny();
                             break;
                         case MenuListAdmin.Quit:
-                            loop = false;
+                            Environment.Exit(0);
                             break;
                     }
                 }
@@ -589,7 +590,7 @@ namespace RasmusAB
                         VisaVarukorg();
                         break;
                     case MenyKund.Quit:
-                        ;
+                        Environment.Exit(0);
                         break;
                 }
             }
