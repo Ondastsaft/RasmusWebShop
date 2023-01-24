@@ -8,6 +8,5 @@
         public int Antal { get; set; }
         public Varukorg Varukorg { get; set; }
         public int VarukorgId { get; set; }
-
     }
 }
