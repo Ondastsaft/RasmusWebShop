@@ -52,7 +52,7 @@ namespace RasmusAB
             Console.Clear();
             bool quit = false;
 
-            Console.WriteLine($"Välkommen till Rasmus AB!");
+            Console.WriteLine($"Välkommen till Rasmus AB! \n");
 
             Console.WriteLine($"{(int)MenuList.ShowCategory}. Kategorier");
             Console.WriteLine($"{(int)MenuList.SearchProduct}. Sök produkt");
@@ -134,12 +134,10 @@ namespace RasmusAB
                 if (user.Password == password && user.Password.Contains("Admin"))
                 {
                     Program.IsAdmin = true;
-                    Console.WriteLine("Hej " + user.Username + "!");
                 }
                 else if (user.Password == password)
                 {
                     Program.AnvändarId = user.Id;
-                    Console.WriteLine("Hej " + user.Username + "!");
                     user.Varukorg = new Varukorg() { AnvändarId = user.Id };
                     db.SaveChanges();
                 }
@@ -154,12 +152,16 @@ namespace RasmusAB
         //Admin
         public static void AdminMeny()
         {
+            var db = new RasmusABContext();
+
             Console.Clear();
             MenuListAdmin menuAdmin = (MenuListAdmin)99;
 
             int nr;
             if (Program.IsAdmin == true)
             {
+                Console.WriteLine("Hej " + db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().Namn + "! \n");
+
                 Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
                 Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
                 Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
@@ -426,19 +428,23 @@ namespace RasmusAB
         //Kund
         public static void KundMeny()
         {
-            Console.Clear();
+            var db = new RasmusABContext();
+
             bool quit = false;
             int nr;
             MenyKund menuCustomer = (MenyKund)99;
 
             bool loop = true;
 
-            Console.WriteLine($"{(int)MenyKund.ShowCategory}. Visa Kategorier");
-            Console.WriteLine($"{(int)MenyKund.SearchProduct}. Sök Produkt");
-            Console.WriteLine($"{(int)MenyKund.ShopingCart}. Varukorg");
-            Console.WriteLine($"{(int)MenyKund.Quit}. Avsluta");
             while (loop)
             {
+                Console.Clear();
+                Console.WriteLine("Hej " + db.Användare.Where(k => k.Id == Program.AnvändarId).SingleOrDefault().Namn + "! \n");
+
+                Console.WriteLine($"{(int)MenyKund.ShowCategory}. Visa Kategorier");
+                Console.WriteLine($"{(int)MenyKund.SearchProduct}. Sök Produkt");
+                Console.WriteLine($"{(int)MenyKund.ShopingCart}. Varukorg");
+                Console.WriteLine($"{(int)MenyKund.Quit}. Avsluta");
 
                 // Default
                 if (int.TryParse(Console.ReadLine(), out nr))
@@ -620,10 +626,11 @@ namespace RasmusAB
             {
                 LäggProduktIVarukorg(produktId);
                 Console.WriteLine("Produkt " + product.Namn + " tillagd");
+                GåTillbaka();
             }
-            else if (val == "N")
+            else
             {
-
+                GåTillbaka();
             }
 
         }
@@ -864,6 +871,11 @@ namespace RasmusAB
             double moms = (orderSumma * 0.2);
             Console.WriteLine("Ordersumma total = " + orderSumma + "var av moms = " + moms);
         }
+        public static void GåTillbaka()
+        {
+            Console.WriteLine("Tryck på valfri tangent för att gå tillbaka till menyn :)");
+            Console.ReadKey();
+        }
 
 
         //Dev
@@ -881,21 +893,23 @@ namespace RasmusAB
                 Land = "Sverige",
                 Telefonnummer = 0701234567,
                 Email = "Kund@hotmail.com",
+                Varukorg = new Varukorg(),
                 IsAdmin = false,
 
             };
+            k.Varukorg.Användare = k;
             db.Användare.Add(k);
 
             Användare a = new Användare()
             {
                 Username = "Admin",
                 Password = "Admin123",
-                Namn = "Hassan",
-                Gata = "Kundgatan 1",
-                Stad = "Kundstaden",
+                Namn = "Sara",
+                Gata = "Admingatan 1",
+                Stad = "Adminstaden",
                 Land = "Sverige",
-                Telefonnummer = 0701234567,
-                Email = "Kund@hotmail.com",
+                Telefonnummer = 0739876543,
+                Email = "Admin@hotmail.com",
                 IsAdmin = true,
                 Varukorg = new Varukorg()
 

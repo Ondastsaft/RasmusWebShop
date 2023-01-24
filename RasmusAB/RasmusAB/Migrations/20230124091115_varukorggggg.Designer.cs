@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -11,9 +12,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230124091115_varukorggggg")]
+    partial class varukorggggg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,13 +66,14 @@ namespace RasmusAB.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VarukorgId")
+                    b.Property<int?>("VarukorgId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("VarukorgId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[VarukorgId] IS NOT NULL");
 
                     b.ToTable("Användare");
                 });
@@ -234,9 +237,7 @@ namespace RasmusAB.Migrations
                 {
                     b.HasOne("RasmusAB.Models.Varukorg", "Varukorg")
                         .WithOne("Användare")
-                        .HasForeignKey("RasmusAB.Models.Användare", "VarukorgId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RasmusAB.Models.Användare", "VarukorgId");
 
                     b.Navigation("Varukorg");
                 });

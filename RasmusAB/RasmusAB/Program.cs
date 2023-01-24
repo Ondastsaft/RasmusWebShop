@@ -10,30 +10,28 @@ namespace RasmusAB
 
         static void Main(string[] args)
         {
-            //Methods.LäggTillTestKategorier();
-            //Methods.SkapaLeverantör();
-            //Methods.LäggTillTestAnvändare();
-            //Methods.LäggTillTestprodukter();
+            Methods.LäggTillTestKategorier();
+            Methods.SkapaLeverantör();
+            Methods.LäggTillTestAnvändare();
+            Methods.LäggTillTestprodukter();
 
-            bool quit = false;
-            AnvändarId = 0;
 
-            while (quit != true)
-            {
-                if (AnvändarId == 0)
-                {
-                    quit = Methods.StartMeny();
+            //while (quit != true)
+            //{
+            //    if (AnvändarId == 0)
+            //    {
+            //        quit = Methods.StartMeny();
 
-                }
-                else if (IsAdmin == true)
-                {
-                    Methods.AdminMeny();
-                }
-                else
-                {
-                    Methods.KundMeny();
-                }
-            }
+            //    }
+            //    else if (IsAdmin == true)
+            //    {
+            //        Methods.AdminMeny();
+            //    }
+            //    else
+            //    {
+            //        Methods.KundMeny();
+            //    }
+            //}
         }
 
 
