@@ -3,7 +3,7 @@
     public class Varukorg
     {
         public int Id { get; set; }
-        public virtual ICollection<Varukorgsprodukt> Varukorgsprodukts { get; set; }
+        public virtual ICollection<Varukorgsprodukt>? Varukorgsprodukts { get; set; }
         public int AnvändarId { get; set; }
         public Användare Användare { get; set; }
         public Order Order { get; set; }

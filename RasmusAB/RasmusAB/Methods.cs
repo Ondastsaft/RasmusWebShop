@@ -753,13 +753,17 @@ namespace RasmusAB
 
             var varukorgsprodukter = db.Varukorgsprodukts.Where(v => v.VarukorgId == 1).ToList();
             int index = 1;
+            Console.WriteLine("Såhär ser din varukorg ut!");
+            Console.WriteLine("--------------------------------------------------------------");
             foreach (var varukorgsprodukt in varukorgsprodukter)
             {
                 var produkt = db.Produkter.Where(p => p.Id == varukorgsprodukt.ProduktId).SingleOrDefault();
                 Console.WriteLine(index + ". " + produkt.Namn + " " + produkt.Färg + " " + varukorgsprodukt.Antal + " " + produkt.Pris + "kr");
                 index++;
             }
+            Console.WriteLine("--------------------------------------------------------------");
             Console.WriteLine("");
+            Console.WriteLine("Vänligen välj ett utav alternativen nedan för att gå vidare: \n");
             Console.WriteLine("Ändra produkt = 1");
             Console.WriteLine("Ta bort produkt = 2");
             Console.WriteLine("Gå vidare till frakt = 3");
@@ -779,8 +783,7 @@ namespace RasmusAB
                     ÄndraAntalIVarukorg(varukorgsprodukter[chosenProductAmount].Produkt.Namn);
                     break;
                 case 2:
-                    var chosenProductDelete = int.Parse(Console.ReadLine());
-                    TaBortProduktIVarukorg(varukorgsprodukter[chosenProductDelete].Produkt.Namn);
+                    TaBortProduktIVarukorg();
                     break;
                 case 3:
                     Frakt();
@@ -828,7 +831,7 @@ namespace RasmusAB
 
             foreach (var leverantör in db.Leverantörer)
             {
-                Console.WriteLine(leverantör.Id + ". " + leverantör.Name + leverantör.Price + "Kr");
+                Console.WriteLine(leverantör.Id + ". " + leverantör.Name + " " + leverantör.Price + "Kr");
             }
             Console.WriteLine("Välj en leverantör (Id)");
             int choise = int.Parse(Console.ReadLine());
@@ -838,6 +841,7 @@ namespace RasmusAB
             string choice = Console.ReadLine();
             if (choice == "J" || choice == "j")
             {
+                Console.Clear();
                 order = BetalaOrder(order);
             }
             Console.WriteLine("Slutför betalning? (J/N)");
@@ -852,9 +856,15 @@ namespace RasmusAB
 
             db.Ordrar.Add(order);
             db.SaveChanges();
-            
+
             //Koppling till varukorg saknas!
-            db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().Varukorg = new Varukorg();
+            foreach(var varukorgsprodukt in db.Varukorgsprodukts)
+            {
+                if(varukorgsprodukt.VarukorgId == varukorgsid)
+                {
+                    db.Varukorgsprodukts.Remove(varukorgsprodukt);
+                }
+            }
             db.SaveChanges();
 
         }
@@ -862,11 +872,12 @@ namespace RasmusAB
         {
             SummeraVarukorg();
             Console.WriteLine();
-            Console.WriteLine("Betalningsmetod \n\n " +
+            Console.WriteLine("\nBetalningsmetod \n---------------\n " +
                 "Vänligen skriv ett utav alternativen nedan: " +
                 "\n - Swish " +
                 "\n - Kort");
             order.BetalningsUppgifter = Console.ReadLine();
+            Console.WriteLine("--------------------------------------------");
 
             return order;
 
@@ -881,11 +892,21 @@ namespace RasmusAB
             db.Varukorgsprodukts.Where(v => v.ProduktId == id).SingleOrDefault().Antal = newAmount;
             db.SaveChanges();
         }
-        public static void TaBortProduktIVarukorg(string produktnamn)
+        public static void TaBortProduktIVarukorg()
         {
             var db = new RasmusABContext();
+            var varukorgsprodukter = db.Varukorgsprodukts.Where(v => v.VarukorgId == 1).ToList();
 
-            int id = db.Produkter.Where(p => p.Namn == produktnamn).SingleOrDefault().Id;
+            foreach (var varukorgsprodukt in varukorgsprodukter)
+            {
+                var produkt = db.Produkter.Where(p => p.Id == varukorgsprodukt.ProduktId).SingleOrDefault();
+                Console.WriteLine(varukorgsprodukt.Id + ". " + produkt.Namn + " " + produkt.Färg + " " + varukorgsprodukt.Antal + " " + produkt.Pris + "kr");
+            }
+
+            Console.WriteLine("Vänligen välj produkt att ta bort (Ange produktId):");
+            var chosenProductDelete = int.Parse(Console.ReadLine());
+
+            int id = db.Varukorgsprodukts.Where(p => p.Id == chosenProductDelete).SingleOrDefault().Id;
             db.Remove(db.Varukorgsprodukts.Where(v => v.ProduktId == id).SingleOrDefault());
             db.SaveChanges();
         }
@@ -897,6 +918,8 @@ namespace RasmusAB
             var varukorgsprodukter = db.Varukorgsprodukts.Where(v => v.VarukorgId == varukorgsId).ToList();
             int index = 1;
             int orderSumma = 0;
+            Console.WriteLine("Produkter");
+            Console.WriteLine("------------------------------------------------");
             foreach (var varukorgsprodukt in varukorgsprodukter)
             {
                 var produkt = db.Produkter.Where(p => p.Id == varukorgsprodukt.ProduktId).SingleOrDefault();
@@ -904,9 +927,10 @@ namespace RasmusAB
                 index++;
                 orderSumma = orderSumma + (varukorgsprodukt.Antal * produkt.Pris);
             }
+            Console.WriteLine("------------------------------------------------");
             //int varukorgsId = db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().VarukorgsId;
             double moms = (orderSumma * 0.2);
-            Console.WriteLine("Ordersumma total = " + orderSumma + "var av moms = " + moms);
+            Console.WriteLine("Ordersumma total = " + orderSumma + " var av moms = " + moms);
         }
         public static void GåTillbaka()
         {
