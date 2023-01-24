@@ -163,7 +163,7 @@ namespace RasmusAB
                 while(loop)
                 {
                     int nr;
-
+                    Console.Clear();
                     Console.WriteLine("Hej " + db.Användare.Where(a => a.Id == Program.AnvändarId).SingleOrDefault().Namn + "! \n");
 
                     Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
@@ -361,7 +361,7 @@ namespace RasmusAB
                 Console.WriteLine(produkt.Namn + " - ID: " + produkt.Id);
             }
             bool changeProduct = true;
-            while (changeProduct = true)
+            while (changeProduct == true)
             {
                 Console.WriteLine("Vilken produkt vill du ändra? (Skriv ProduktID)");
                 var chosenProductId = int.Parse(Console.ReadLine());
@@ -423,8 +423,11 @@ namespace RasmusAB
             {
                 Namn = kategoriNamn
             };
+
             db.Kategorier.Add(nyKategori);
             db.SaveChanges();
+            Console.WriteLine("Ny kategori tillagd: \n" + kategoriNamn);
+            GåTillbaka();
         }
         public static void TaBortKategori()
         {
@@ -439,6 +442,61 @@ namespace RasmusAB
             var chosenCategory = db.Kategorier.Where(k => k.Id == chosenCategoryId).SingleOrDefault();
             db.Remove(chosenCategory);
             db.SaveChanges();
+        }
+        public static void ÄndraKunduppgifter()
+        {
+            var db = new RasmusABContext();
+
+            foreach (var användare in db.Användare)
+            {
+                Console.WriteLine(användare.Username + " - ID: " + användare.Id);
+            }
+            bool changeanvändare = true;
+            while (changeanvändare == true)
+            {
+                Console.WriteLine("Vilken användare vill du ändra? (Skriv AnvändarID)");
+                var chosenUserId = int.Parse(Console.ReadLine());
+                var chosenUser = db.Användare.Where(a => a.Id == chosenUserId).SingleOrDefault();
+
+                Console.WriteLine(chosenUser.Username + "\n" + "Nytt användarnamn: ");
+                var newUsername = Console.ReadLine();
+                chosenUser.Username = newUsername;
+                Console.WriteLine(chosenUser.Password + "\n" + "Nytt lösenord: ");
+                var newPassword = Console.ReadLine();
+                chosenUser.Password = newPassword;
+                Console.WriteLine(chosenUser.Namn + "\n" + "Nytt namn: ");
+                var newName = Console.ReadLine();
+                Console.WriteLine("Adress: \n" + chosenUser.Gata + "\n" + "Ny gata: ");
+                var newStreet = Console.ReadLine();
+                Console.WriteLine(chosenUser.Stad + "\n" + "Ny stad: ");
+                var newCity = Console.ReadLine();
+                Console.WriteLine(chosenUser.Land + "\n" + "Nytt land: ");
+                var newCountry = Console.ReadLine();
+                Console.WriteLine(chosenUser.Telefonnummer + "\n" + "Nytt telefonnummer: ");
+                var newTel = int.Parse(Console.ReadLine());
+                Console.WriteLine(chosenUser.Email + "\n" + "Ny email: ");
+                var newEmail = Console.ReadLine();
+                chosenUser.Gata = newStreet;
+                chosenUser.Stad = newCity;
+                chosenUser.Land = newCountry;
+                chosenUser.Telefonnummer = newTel;
+                chosenUser.Email = newEmail;
+
+                Console.WriteLine("Ändrad användare: " + "\n" + newUsername + "\n" + newPassword + "\n" + newName + "\n" + "Adress: " + newStreet + " " + newCity + " " + newCountry + "\n" + "+46" + newTel + "\n" + newEmail);
+
+                Console.WriteLine("Vill du spara? (J/N)");
+                var answer = Console.ReadLine();
+                if (answer == "J")
+                {
+                    db.SaveChanges();
+                    changeanvändare = false;
+                }
+                if (answer == "N")
+                {
+
+                }
+            }
+
         }
         public static void FelaktigInmatning()
         {
@@ -830,59 +888,6 @@ namespace RasmusAB
             int id = db.Produkter.Where(p => p.Namn == produktnamn).SingleOrDefault().Id;
             db.Remove(db.Varukorgsprodukts.Where(v => v.ProduktId == id).SingleOrDefault());
             db.SaveChanges();
-        }
-        public static void ÄndraKunduppgifter()
-        {
-            var db = new RasmusABContext();
-
-            foreach (var användare in db.Användare)
-            {
-                Console.WriteLine(användare.Username + " - ID: " + användare.Id);
-            }
-            bool changeanvändare = true;
-            while (changeanvändare == true)
-            {
-                Console.WriteLine("Vilken användare vill du ändra? (Skriv AnvändarID)");
-                var chosenUserId = int.Parse(Console.ReadLine());
-                var chosenUser = db.Användare.Where(a => a.Id == chosenUserId).SingleOrDefault();
-
-                Console.WriteLine(chosenUser.Username + "\n" + "Nytt namn: ");
-                var newName = Console.ReadLine();
-                chosenUser.Username = newName;
-                Console.WriteLine(chosenUser.Password + "\n" + "Nytt lösenord: ");
-                var newPassword = Console.ReadLine();
-                chosenUser.Password = newPassword;
-                Console.WriteLine("Adress: \n" + chosenUser.Gata + "\n" + "Ny gata: ");
-                var newStreet = Console.ReadLine();
-                Console.WriteLine(chosenUser.Stad + "\n" + "Ny stad: ");
-                var newCity = Console.ReadLine();
-                Console.WriteLine(chosenUser.Land + "\n" + "Nytt land: ");
-                var newCountry = Console.ReadLine();
-                Console.WriteLine(chosenUser.Telefonnummer + "\n" + "Nytt telefonnummer: ");
-                var newTel = int.Parse(Console.ReadLine());
-                Console.WriteLine(chosenUser.Email + "\n" + "Ny email: ");
-                var newEmail = Console.ReadLine();
-                chosenUser.Gata = newStreet;
-                chosenUser.Stad = newCity;
-                chosenUser.Land = newCountry;
-                chosenUser.Telefonnummer = newTel;
-                chosenUser.Email = newEmail;
-
-                Console.WriteLine("Ändrad användare: " + "\n" + newName + "\n" + newPassword + "\n" + "Adress: " + newStreet + " " + newCity + " " + newCountry + "\n" + "+46" + newTel + "\n" + newEmail);
-
-                Console.WriteLine("Vill du spara? (J/N)");
-                var answer = Console.ReadLine();
-                if (answer == "J")
-                {
-                    db.SaveChanges();
-                    changeanvändare = false;
-                }
-                if (answer == "N")
-                {
-
-                }
-            }
-
         }
         public static void SummeraVarukorg()
         {
