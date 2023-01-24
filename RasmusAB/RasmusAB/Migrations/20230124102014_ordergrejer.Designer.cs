@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RasmusAB.Models;
 
@@ -11,9 +12,10 @@ using RasmusAB.Models;
 namespace RasmusAB.Migrations
 {
     [DbContext(typeof(RasmusABContext))]
-    partial class RasmusABContextModelSnapshot : ModelSnapshot
+    [Migration("20230124102014_ordergrejer")]
+    partial class ordergrejer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,6 +103,7 @@ namespace RasmusAB.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Price")
@@ -120,9 +123,10 @@ namespace RasmusAB.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("BetalningsUppgifter")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LeverantörId")
+                    b.Property<int>("LeverantörId")
                         .HasColumnType("int");
 
                     b.Property<double>("Moms")
@@ -240,7 +244,9 @@ namespace RasmusAB.Migrations
                 {
                     b.HasOne("RasmusAB.Models.Leverantör", "Leverantör")
                         .WithMany("Orders")
-                        .HasForeignKey("LeverantörId");
+                        .HasForeignKey("LeverantörId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Leverantör");
                 });
