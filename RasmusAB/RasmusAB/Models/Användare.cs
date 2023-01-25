@@ -7,8 +7,7 @@
         public string Username { get; set; }
         public string Password { get; set; }
         public virtual ICollection<Varukorg> Varukorgar { get; set; }
-        public bool IsAdmin { get; set; }
-        public int VarukorgId { get; set; }
+        public bool Admin { get; set; }
         public string Namn { get; set; }
         public string Gata { get; set; }
         public string Stad { get; set; }

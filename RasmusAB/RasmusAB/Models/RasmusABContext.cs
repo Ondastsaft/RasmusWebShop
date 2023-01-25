@@ -11,7 +11,7 @@ namespace RasmusAB.Models
         public DbSet<Order> Ordrar { get; set; }
         public DbSet<Produkt> Produkter { get; set; }
         public DbSet<Kategori> Kategorier { get; set; }
-        public DbSet<Varukorgsprodukt> Varukorgsprodukts { get; set; }
+        public DbSet<Varukorgsprodukt> Varukorgsprodukter { get; set; }
         public DbSet<Leverantör> Leverantörer { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -23,7 +23,9 @@ namespace RasmusAB.Models
             //modelBuilder.Entity<Order>().HasOne(l => l.Leverantör).WithMany(o => o.Orders).HasForeignKey(l => l.LeverantörsId);
             //modelBuilder.Entity<Order>().HasOne(v => v.Varukorg).WithOne(o => o.Order).HasForeignKey<Varukorg>(v => v.OrderId);
             //modelBuilder.Entity<Leverantör>().HasMany(o => o.Orders).WithOne(l => l.Leverantör).HasForeignKey(o => o.LeverantörsId);
-            //modelBuilder.Entity<Varukorg>().HasOne(o => o.Order).WithOne(v => v.Varukorg).HasForeignKey<Order>(o => o.Id);
+            modelBuilder.Entity<Varukorg>().HasOne(v => v.Order).WithOne(o => o.Varukorg).HasForeignKey<Order>(o => o.VarukorgId);
+            modelBuilder.Entity<Order>().HasOne(o => o.Varukorg).WithOne(v => v.Order).HasForeignKey<Varukorg>(v => v.OrderId);
+
         }
     }
 }

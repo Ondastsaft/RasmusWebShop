@@ -30,6 +30,9 @@ namespace RasmusAB.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<bool>("Admin")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -37,9 +40,6 @@ namespace RasmusAB.Migrations
                     b.Property<string>("Gata")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Land")
                         .IsRequired()
@@ -63,9 +63,6 @@ namespace RasmusAB.Migrations
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("VarukorgId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -98,6 +95,7 @@ namespace RasmusAB.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Price")
@@ -119,7 +117,7 @@ namespace RasmusAB.Migrations
                     b.Property<string>("BetalningsUppgifter")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LeverantörId")
+                    b.Property<int>("LeverantörId")
                         .HasColumnType("int");
 
                     b.Property<double>("Moms")
@@ -131,7 +129,7 @@ namespace RasmusAB.Migrations
                     b.Property<int>("Summa")
                         .HasColumnType("int");
 
-                    b.Property<int>("VarukorgsId")
+                    b.Property<int>("VarukorgId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -190,9 +188,6 @@ namespace RasmusAB.Migrations
                     b.Property<bool>("Slutbetald")
                         .HasColumnType("bit");
 
-                    b.Property<int>("VarukorgsProduktId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AnvändareId");
@@ -227,14 +222,16 @@ namespace RasmusAB.Migrations
 
                     b.HasIndex("VarukorgId");
 
-                    b.ToTable("Varukorgsprodukts");
+                    b.ToTable("Varukorgsprodukter");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Order", b =>
                 {
                     b.HasOne("RasmusAB.Models.Leverantör", "Leverantör")
                         .WithMany("Orders")
-                        .HasForeignKey("LeverantörId");
+                        .HasForeignKey("LeverantörId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Leverantör");
                 });
@@ -270,7 +267,7 @@ namespace RasmusAB.Migrations
             modelBuilder.Entity("RasmusAB.Models.Varukorgsprodukt", b =>
                 {
                     b.HasOne("RasmusAB.Models.Produkt", "Produkt")
-                        .WithMany("Varukorgsprodukts")
+                        .WithMany("Varukorgsprodukter")
                         .HasForeignKey("ProduktId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -303,12 +300,13 @@ namespace RasmusAB.Migrations
 
             modelBuilder.Entity("RasmusAB.Models.Order", b =>
                 {
-                    b.Navigation("Varukorg");
+                    b.Navigation("Varukorg")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Produkt", b =>
                 {
-                    b.Navigation("Varukorgsprodukts");
+                    b.Navigation("Varukorgsprodukter");
                 });
 
             modelBuilder.Entity("RasmusAB.Models.Varukorg", b =>

@@ -7,9 +7,10 @@
         public double Moms { get; set; }
         public string? BetalningsUppgifter { get; set; }
         public bool Slutbetald { get; set; }
-        public Varukorg? Varukorg { get; set; }
-        public int VarukorgsId { get; set; }
-        public virtual Leverantör? Leverantör { get; set; }
+        public Varukorg Varukorg { get; set; }
+        public int VarukorgId { get; set; }
+        public Leverantör Leverantör { get; set; }
+        public int LeverantörId { get; set; }
         public Order()
         {
 
