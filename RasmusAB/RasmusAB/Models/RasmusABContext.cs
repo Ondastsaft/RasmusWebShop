@@ -15,8 +15,8 @@ namespace RasmusAB.Models
         public DbSet<Leverantör> Leverantörer { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=rasmusdb;Trusted_Connection=True; ");
-            //optionsBuilder.UseSqlServer("Server = tcp:rasmusab.database.windows.net, 1433; Initial Catalog = DBRasmusABWebshop; Persist Security Info = False; User ID = RasmusABGrupp7; Password =Admin123; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
+
+            optionsBuilder.UseSqlServer("Server = tcp:rasmusab.database.windows.net, 1433; Initial Catalog = DBRasmusABWebshop; Persist Security Info = False; User ID = RasmusABGrupp7; Password =Admin123; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
