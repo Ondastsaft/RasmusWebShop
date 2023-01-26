@@ -26,6 +26,7 @@ namespace RasmusAB
             Produkt = 1,
             Kategori,
             Kunder,
+            VisaAnvändaresOrderhistorik,
             Quit = 9
 
         }
@@ -121,13 +122,13 @@ namespace RasmusAB
         }
         public static void LogIn()
         {
-            //Console.WriteLine("Användarnamn: ");
-            //string username = Console.ReadLine();
+            Console.WriteLine("Användarnamn: ");
+            string username = Console.ReadLine();
 
-            ////Console.WriteLine("Lösenord: ");
-            //string password = Console.ReadLine();
-            string username = "Kund";
-            string password = "Kund123";
+            Console.WriteLine("Lösenord: ");
+            string password = Console.ReadLine();
+            //string username = "Kund";
+            //string password = "Kund123";
 
             var db = new RasmusABContext();
             var user = db.Användare.Where(u => u.Username == username).FirstOrDefault();
@@ -192,6 +193,7 @@ namespace RasmusAB
                     Console.WriteLine($"{(int)MenuListAdmin.Produkt}. Produkter");
                     Console.WriteLine($"{(int)MenuListAdmin.Kategori}. Kategorier");
                     Console.WriteLine($"{(int)MenuListAdmin.Kunder}. Kunder");
+                    Console.WriteLine($"{(int)MenuListAdmin.VisaAnvändaresOrderhistorik}. Visa användares orderhistorik");
                     Console.WriteLine($"{(int)MenuListAdmin.Quit}. Avsluta");
 
 
@@ -220,6 +222,10 @@ namespace RasmusAB
                         case MenuListAdmin.Kunder:
                             Console.Clear();
                             AdminKundMeny();
+                            break;
+                        case MenuListAdmin.VisaAnvändaresOrderhistorik:
+                            Console.Clear();
+                            VisaAnvändaresOrderhistorik();
                             break;
                         case MenuListAdmin.Quit:
                             Environment.Exit(0);
@@ -529,7 +535,43 @@ namespace RasmusAB
             Console.ReadKey();
             Console.Clear();
         }
+        public static void VisaAnvändaresOrderhistorik()
+        {
+            var db = new RasmusABContext();
 
+            foreach (var användare in db.Användare)
+            {
+                Console.WriteLine(användare.Username + " - ID: " + användare.AnvändareId);
+            }
+
+
+            Console.WriteLine("Vilken användare vill du visa orderhistorik för? (Skriv AnvändarID)");
+            var chosenUserId = int.Parse(Console.ReadLine());
+            var chosenUser = db.Användare.Where(a => a.AnvändareId == chosenUserId).SingleOrDefault();
+            Console.WriteLine($"orderhistorik för {chosenUser.Namn}");
+            Console.WriteLine("-------------------------------------");
+            var varukorgar = db.Varukorgar.Where(v => v.AnvändareId == chosenUserId).ToList();
+            foreach (Varukorg varukorg in varukorgar)
+            {
+                if (varukorg.Slutbetald)
+                {
+                    Console.WriteLine();
+                    var varukorgensprodukter = db.Varukorgsprodukter.Where(vp => vp.VarukorgId == varukorg.VarukorgId).ToList();
+                    foreach (Varukorgsprodukt varukorgsprodukt in varukorgensprodukter)
+                    {
+                        var produkt = db.Produkter.Where(p => p.ProduktId == varukorgsprodukt.ProduktId).SingleOrDefault();
+                        Console.WriteLine($"Produkt:{produkt.Namn} \t Antal {varukorgsprodukt.Antal} \t Pris: {produkt.Pris}\t Summa = {(produkt.Pris * varukorgsprodukt.Antal)} ");
+
+
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine("-------------------------------------");
+                    Console.WriteLine();
+                }
+            }
+            GåTillbaka();
+
+        }
 
         //Kund
         public static void KundMeny()
@@ -890,10 +932,6 @@ namespace RasmusAB
                         user.Varukorgar.Add(new Varukorg());
                         db.SaveChanges();
                     }
-
-
-
-
                 }
 
             }
@@ -907,7 +945,7 @@ namespace RasmusAB
             foreach (Varukorgsprodukt varukorgsprodukt in varukorgsprodukter)
             {
                 var produkt = db.Produkter.Where(p => p.ProduktId == varukorgsprodukt.VarukorgsproduktId).SingleOrDefault();
-                summa = summa + (produkt.Pris * produkt.Antal);
+                summa = summa + (produkt.Pris * varukorgsprodukt.Antal);
             }
             return summa;
         }
