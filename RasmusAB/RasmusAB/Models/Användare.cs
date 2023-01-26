@@ -2,7 +2,7 @@
 {
     public class Användare
     {
-        public int Id { get; set; }
+        public int AnvändareId { get; set; }
         //public string Usertype { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }

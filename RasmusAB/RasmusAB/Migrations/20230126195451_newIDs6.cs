@@ -4,7 +4,7 @@
 
 namespace RasmusAB.Migrations
 {
-    public partial class orderidfix4 : Migration
+    public partial class newIDs6 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace RasmusAB.Migrations
                 name: "Användare",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    AnvändareId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -26,41 +26,61 @@ namespace RasmusAB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Användare", x => x.Id);
+                    table.PrimaryKey("PK_Användare", x => x.AnvändareId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Kategorier",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    KategoriId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Namn = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Kategorier", x => x.Id);
+                    table.PrimaryKey("PK_Kategorier", x => x.KategoriId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Leverantörer",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    LeverantörId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Leverantörer", x => x.Id);
+                    table.PrimaryKey("PK_Leverantörer", x => x.LeverantörId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Varukorgar",
+                columns: table => new
+                {
+                    VarukorgId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AnvändareId = table.Column<int>(type: "int", nullable: false),
+                    Slutbetald = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Varukorgar", x => x.VarukorgId);
+                    table.ForeignKey(
+                        name: "FK_Varukorgar_Användare_AnvändareId",
+                        column: x => x.AnvändareId,
+                        principalTable: "Användare",
+                        principalColumn: "AnvändareId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Produkter",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ProduktId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Namn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Färg = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -70,12 +90,12 @@ namespace RasmusAB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Produkter", x => x.Id);
+                    table.PrimaryKey("PK_Produkter", x => x.ProduktId);
                     table.ForeignKey(
                         name: "FK_Produkter_Kategorier_KategoriId",
                         column: x => x.KategoriId,
                         principalTable: "Kategorier",
-                        principalColumn: "Id",
+                        principalColumn: "KategoriId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -83,7 +103,7 @@ namespace RasmusAB.Migrations
                 name: "Ordrar",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    OrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Summa = table.Column<int>(type: "int", nullable: false),
                     Moms = table.Column<double>(type: "float", nullable: false),
@@ -94,46 +114,26 @@ namespace RasmusAB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ordrar", x => x.Id);
+                    table.PrimaryKey("PK_Ordrar", x => x.OrderId);
                     table.ForeignKey(
                         name: "FK_Ordrar_Leverantörer_LeverantörId",
                         column: x => x.LeverantörId,
                         principalTable: "Leverantörer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Varukorgar",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AnvändareId = table.Column<int>(type: "int", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: true),
-                    Slutbetald = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Varukorgar", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Varukorgar_Användare_AnvändareId",
-                        column: x => x.AnvändareId,
-                        principalTable: "Användare",
-                        principalColumn: "Id",
+                        principalColumn: "LeverantörId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Varukorgar_Ordrar_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Ordrar",
-                        principalColumn: "Id");
+                        name: "FK_Ordrar_Varukorgar_VarukorgId",
+                        column: x => x.VarukorgId,
+                        principalTable: "Varukorgar",
+                        principalColumn: "VarukorgId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Varukorgsprodukter",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    VarukorgsproduktId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProduktId = table.Column<int>(type: "int", nullable: false),
                     Antal = table.Column<int>(type: "int", nullable: false),
@@ -141,18 +141,18 @@ namespace RasmusAB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Varukorgsprodukter", x => x.Id);
+                    table.PrimaryKey("PK_Varukorgsprodukter", x => x.VarukorgsproduktId);
                     table.ForeignKey(
                         name: "FK_Varukorgsprodukter_Produkter_ProduktId",
                         column: x => x.ProduktId,
                         principalTable: "Produkter",
-                        principalColumn: "Id",
+                        principalColumn: "ProduktId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Varukorgsprodukter_Varukorgar_VarukorgId",
                         column: x => x.VarukorgId,
                         principalTable: "Varukorgar",
-                        principalColumn: "Id",
+                        principalColumn: "VarukorgId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -160,6 +160,12 @@ namespace RasmusAB.Migrations
                 name: "IX_Ordrar_LeverantörId",
                 table: "Ordrar",
                 column: "LeverantörId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ordrar_VarukorgId",
+                table: "Ordrar",
+                column: "VarukorgId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Produkter_KategoriId",
@@ -170,13 +176,6 @@ namespace RasmusAB.Migrations
                 name: "IX_Varukorgar_AnvändareId",
                 table: "Varukorgar",
                 column: "AnvändareId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Varukorgar_OrderId",
-                table: "Varukorgar",
-                column: "OrderId",
-                unique: true,
-                filter: "[OrderId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Varukorgsprodukter_ProduktId",
@@ -192,7 +191,13 @@ namespace RasmusAB.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Ordrar");
+
+            migrationBuilder.DropTable(
                 name: "Varukorgsprodukter");
+
+            migrationBuilder.DropTable(
+                name: "Leverantörer");
 
             migrationBuilder.DropTable(
                 name: "Produkter");
@@ -205,12 +210,6 @@ namespace RasmusAB.Migrations
 
             migrationBuilder.DropTable(
                 name: "Användare");
-
-            migrationBuilder.DropTable(
-                name: "Ordrar");
-
-            migrationBuilder.DropTable(
-                name: "Leverantörer");
         }
     }
 }

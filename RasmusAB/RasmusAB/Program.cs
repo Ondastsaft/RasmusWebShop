@@ -10,10 +10,10 @@ namespace RasmusAB
 
         static void Main(string[] args)
         {
-            //Methods.LäggTillTestKategorier();
-            //Methods.SkapaLeverantör();
-            //Methods.LäggTillTestAnvändare();
-            //Methods.LäggTillTestprodukter();
+            Methods.LäggTillTestKategorier();
+            Methods.SkapaLeverantör();
+            Methods.LäggTillTestAnvändare();
+            Methods.LäggTillTestprodukter();
 
             bool quit = false;
 

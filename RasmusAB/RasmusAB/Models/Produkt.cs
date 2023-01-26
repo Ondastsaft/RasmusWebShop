@@ -2,12 +2,12 @@
 {
     public class Produkt
     {
-        public int Id { get; set; }
+        public int ProduktId { get; set; }
         public string Namn { get; set; }
         public string Färg { get; set; }
         public int Pris { get; set; }
         public int Antal { get; set; }
-        public virtual Kategori Kategori { get; set; }
+        public Kategori Kategori { get; set; }
         public int KategoriId { get; set; }
         public virtual ICollection<Varukorgsprodukt> Varukorgsprodukter { get; set; }
 

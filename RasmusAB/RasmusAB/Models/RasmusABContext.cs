@@ -15,7 +15,8 @@ namespace RasmusAB.Models
         public DbSet<Leverantör> Leverantörer { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server = tcp:rasmusab.database.windows.net, 1433; Initial Catalog = DBRasmusABWebshop; Persist Security Info = False; User ID = RasmusABGrupp7; Password =Admin123; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
+            optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=rasmusdb;Trusted_Connection=True; ");
+            //optionsBuilder.UseSqlServer("Server = tcp:rasmusab.database.windows.net, 1433; Initial Catalog = DBRasmusABWebshop; Persist Security Info = False; User ID = RasmusABGrupp7; Password =Admin123; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,8 +24,8 @@ namespace RasmusAB.Models
             //modelBuilder.Entity<Order>().HasOne(l => l.Leverantör).WithMany(o => o.Orders).HasForeignKey(l => l.LeverantörsId);
             //modelBuilder.Entity<Order>().HasOne(v => v.Varukorg).WithOne(o => o.Order).HasForeignKey<Varukorg>(v => v.OrderId);
             //modelBuilder.Entity<Leverantör>().HasMany(o => o.Orders).WithOne(l => l.Leverantör).HasForeignKey(o => o.LeverantörsId);
-            modelBuilder.Entity<Varukorg>().HasOne(v => v.Order).WithOne(o => o.Varukorg).HasForeignKey<Order>(o => o.VarukorgId);
-            modelBuilder.Entity<Order>().HasOne(o => o.Varukorg).WithOne(v => v.Order).HasForeignKey<Varukorg>(v => v.OrderId);
+            //modelBuilder.Entity<Varukorg>().HasOne(v => v.Order).WithOne(o => o.Varukorg).HasForeignKey<Order>(o => o.VarukorgId);
+            //modelBuilder.Entity<Order>().HasOne(o => o.Varukorg).WithOne(v => v.Order).HasForeignKey<Varukorg>(v => v.OrderId);
 
         }
     }
